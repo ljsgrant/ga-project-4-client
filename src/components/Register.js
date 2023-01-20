@@ -1,6 +1,6 @@
 import '../styles/Login.scss';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { API } from '../lib/api';
 import { AUTH } from '../lib/auth';
 
@@ -95,6 +95,7 @@ export default function Register() {
           required
         />
         <button type='submit'>Register</button>
+        Already got an account? <Link to='/login'>Log In</Link>.
       </form>
     </div>
   );

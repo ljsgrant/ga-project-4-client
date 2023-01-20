@@ -4,6 +4,8 @@ import BirdList from './components/BirdList';
 import Login from './components/Login';
 import Register from './components/Register';
 
+window.Buffer = window.Buffer || require('buffer').Buffer;
+
 function App() {
   return (
     <div id='app'>
