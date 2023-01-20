@@ -6,7 +6,10 @@ import { AUTH } from '../lib/auth';
 
 export default function Login() {
   const navigate = useNavigate();
-  const [formFields, setFormFields] = useState();
+  const [formFields, setFormFields] = useState({
+    email: '',
+    password: ''
+  });
 
   const handleChange = (event) => {
     setFormFields({ ...formFields, [event.target.name]: event.target.value });
@@ -16,9 +19,9 @@ export default function Login() {
     event.preventDefault();
     try {
       API.POST(API.ENDPOINTS.login, formFields).then(({ data }) => {
-        console.log(data);
+        console.log(data.message);
         AUTH.setToken(data.token);
-        navigate('/');
+        navigate('/birds');
         console.log('Logged in successfully');
       });
     } catch (error) {
@@ -32,7 +35,7 @@ export default function Login() {
 
   return (
     <div className='Login'>
-      <form className='login-form'>
+      <form className='login-form' onSubmit={handleSubmit}>
         <label htmlFor='email'>Email</label>
         <input
           id='email'
@@ -49,9 +52,7 @@ export default function Login() {
           onChange={handleChange}
           required
         />
-        <button type='submit' onSubmit={handleSubmit}>
-          Log In
-        </button>
+        <button type='submit'>Log In</button>
         Not registered? <Link to='/register'>Sign up here</Link>.
       </form>
     </div>
