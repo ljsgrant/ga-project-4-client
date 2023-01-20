@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const ENDPOINTS = {
   allBirds: '/api/birds/',
+  singleBird: (pk) => `/api/birds/${pk}/`,
   register: '/api/auth/register/',
   login: '/api/auth/login/'
 };

@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import BirdList from './components/BirdList';
 import Login from './components/Login';
 import Register from './components/Register';
+import BirdDetails from './components/BirdDetails';
 
 window.Buffer = window.Buffer || require('buffer').Buffer;
 
@@ -16,6 +17,7 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/birds' element={<BirdList />} />
+          <Route path='/birds/:pk' element={<BirdDetails />} />
         </Routes>
       </Router>
     </div>
