@@ -1,20 +1,47 @@
 import '../styles/Login.scss';
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { API } from '../lib/api';
+import { AUTH } from '../lib/auth';
 
 export default function Register() {
+  const navigate = useNavigate();
   const [formFields, setFormFields] = useState({
     username: '',
     email: '',
     first_name: '',
     last_name: '',
+    profile_picture: '',
     password: '',
     password_confirmation: ''
   });
 
-  const handleTextChange = (event) => {};
+  const handleTextChange = (event) => {
+    setFormFields({ ...formFields, [event.target.name]: event.target.value });
+  };
 
-  const handleSubmit = (event) => {};
+  useEffect(() => {
+    console.log(formFields);
+  }, [formFields]);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await API.POST(API.ENDPOINTS.register, formFields);
+
+      const loginData = await API.POST(API.ENDPOINTS.login, {
+        email: formFields.email,
+        password: formFields.password
+      });
+
+      AUTH.setToken(loginData.data.token);
+
+      console.log(`Logged you in, ${formFields.username}`);
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className='Login'>

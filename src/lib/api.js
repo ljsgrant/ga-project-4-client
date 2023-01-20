@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 const ENDPOINTS = {
-  allBirds: '/api/birds/'
+  allBirds: '/api/birds/',
+  register: '/api/auth/register/',
+  login: '/api/auth/login/'
 };
 
 const GET = (endpoint) => axios.get(endpoint);
