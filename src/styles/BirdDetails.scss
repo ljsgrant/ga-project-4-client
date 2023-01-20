@@ -8,9 +8,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    h2 {
+    h2, h3, p {
       padding: 0;
       margin: 0;
+    }
+    .scientific-name {
+      font-style: italic;
     }
     p{
       width: 80%;

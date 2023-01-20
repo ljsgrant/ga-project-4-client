@@ -24,6 +24,9 @@ export default function BirdDetails() {
     <div className='BirdDetails'>
       <div className='left-column'>
         <h2>{birdData?.name}</h2>
+        <h3>
+          (<span className='scientific-name'>{birdData?.scientific_name}</span>)
+        </h3>
         <div className='hero-image-container'>
           <img
             className='hero-image'
