@@ -16,7 +16,7 @@ export default function BirdDetails() {
 
   console.log(pk);
 
-  let DefaultIcon = L.icon({
+  const DefaultMarkerIcon = L.icon({
     iconUrl: icon,
     shadowUrl: iconShadow,
     iconSize: [25, 41],
@@ -29,20 +29,27 @@ export default function BirdDetails() {
       .catch((err) => console.error(err));
   }, [pk]);
 
+  //************************
+  // DEVELOPMENT
   useEffect(() => {
     console.log(birdData);
   }, [birdData]);
+  //************************
 
   return (
     <>
       <div className='BirdDetails'>
         <div className='left-column'>
-          <h2>{birdData?.name}</h2>
-          <h3>
-            (
-            <span className='scientific-name'>{birdData?.scientific_name}</span>
-            )
-          </h3>
+          <div className='title-container'>
+            <h2>{birdData?.name}</h2>
+            <h3>
+              (
+              <span className='scientific-name'>
+                {birdData?.scientific_name}
+              </span>
+              )
+            </h3>
+          </div>
           <div className='hero-image-container'>
             <img
               className='hero-image'
@@ -50,32 +57,42 @@ export default function BirdDetails() {
               alt={birdData?.name}
             />
           </div>
-          <p>{birdData?.description}</p>
+          <div className='info-text-container'>
+            <p>{birdData?.description}</p>
+          </div>
         </div>
         <div className='right-column'>
-          <p>This is the right column</p>
           <div className='sightings-container'>
-            {birdData?.sightings?.map((sighting) => (
+            {/* {birdData?.sightings?.map((sighting) => (
               <p key={sighting.id}>
-                {sighting.sighted_at_datetime} - {sighting.location_lat},{' '}
-                {sighting.location_long}
+              {sighting.sighted_at_datetime} - {sighting.location_lat},{' '}
+              {sighting.location_long}
               </p>
-            ))}
+            ))} */}
+          </div>
+          <div className='map-header'>
+            <h3>User sightings of the {birdData?.name}</h3>
           </div>
           <MapContainer
             center={[51.505, -0.09]}
-            zoom={13}
+            zoom={5}
             scrollWheelZoom={false}
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
             />
-            <Marker icon={DefaultIcon} position={[51.505, -0.09]}>
-              <Popup>
-                A pretty CSS3 popup. <br /> Easily customizable.
-              </Popup>
-            </Marker>
+            {birdData?.sightings?.map((sighting) => (
+              <Marker
+                key={sighting.id}
+                icon={DefaultMarkerIcon}
+                position={[sighting.location_lat, sighting.location_long]}
+              >
+                <Popup>
+                  Seen by {sighting.owner} at {sighting.sighted_at_datetime}
+                </Popup>
+              </Marker>
+            ))}
           </MapContainer>
         </div>
       </div>
