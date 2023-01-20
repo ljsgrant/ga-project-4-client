@@ -1,5 +1,6 @@
 import { API } from '../lib/api';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function BirdList() {
   const [birdData, setBirdData] = useState(null);
@@ -15,7 +16,9 @@ export default function BirdList() {
   return (
     <div className='BirdList'>
       {birdData?.map((bird) => (
-        <p key={bird.id}>{bird.name}</p>
+        <Link to={`/birds/${bird.id}`}>
+          <p key={bird.id}>{bird.name}</p>
+        </Link>
       ))}
     </div>
   );
