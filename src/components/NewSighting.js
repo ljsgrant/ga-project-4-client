@@ -7,8 +7,12 @@ import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
 
 export default function NewSighting() {
   const [allBirds, setAllBirds] = useState(null);
+  const [formFields, setFormFields] = useState({});
   const [selectedBird, setSelectedBird] = useState('');
-  const [markerPosition, setMarkerPosition] = useState([51.505, -0.09]);
+  const [markerPosition, setMarkerPosition] = useState({
+    lat: 51.53606314086357,
+    lng: -0.3515625
+  });
   const markerRef = useRef(null);
 
   const handleTextChange = (event) => {};
@@ -37,9 +41,9 @@ export default function NewSighting() {
     console.log(selectedBird);
   }, [selectedBird]);
 
-  useEffect(() => {
-    console.log(markerPosition);
-  }, [markerPosition]);
+  // useEffect(() => {
+  //   console.log(markerPosition);
+  // }, [markerPosition]);
   // ******************
 
   function moveMarker(event) {
@@ -48,6 +52,15 @@ export default function NewSighting() {
       setMarkerPosition(marker.getLatLng());
     }
   }
+
+  const handleLatLongTextChange = (event) => {
+    if (!isNaN(event.target.value)) {
+      setMarkerPosition({
+        ...markerPosition,
+        [event.target.name]: event.target.value
+      });
+    }
+  };
 
   return (
     <>
@@ -107,6 +120,20 @@ export default function NewSighting() {
               }}
             ></Marker>
           </MapContainer>
+          <label htmlFor='lat'>Latitude:</label>
+          <input
+            id='lat'
+            name='lat'
+            onChange={handleLatLongTextChange}
+            value={markerPosition.lat}
+          />
+          <label htmlFor='long'>Longitude:</label>
+          <input
+            id='long'
+            name='lng'
+            onChange={handleLatLongTextChange}
+            value={markerPosition.lng}
+          />
         </div>
       </div>
     </>
