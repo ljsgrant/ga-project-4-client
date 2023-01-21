@@ -1,27 +1,18 @@
 import '../styles/BirdDetails.scss';
 import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import { useState, useEffect } from 'react';
+import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
 
 import { useParams } from 'react-router';
 import { API } from '../lib/api';
 
-import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 export default function BirdDetails() {
   const { pk } = useParams();
   const [birdData, setBirdData] = useState(null);
 
   console.log(pk);
-
-  const DefaultMarkerIcon = L.icon({
-    iconUrl: icon,
-    shadowUrl: iconShadow,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41]
-  });
 
   useEffect(() => {
     API.GET(API.ENDPOINTS.singleBird(pk))
