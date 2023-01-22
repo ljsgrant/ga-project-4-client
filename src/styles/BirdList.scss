@@ -1,6 +1,7 @@
 .BirdList {
   height: 100%;
   background-color: white;
+  padding-left: 10px;
   .title-container {
     height: 50px;
     width: 50vw;
@@ -21,7 +22,8 @@
       }
     }
     .list-container {
-      height: 100vh;
+      height: 80vh;
+      border-radius: 0px 0px 10px 10px;
       background-color: rgb(236, 236, 236);
       padding: 10px;
       overflow-y: scroll;

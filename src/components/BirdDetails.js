@@ -79,7 +79,8 @@ export default function BirdDetails() {
               >
                 <Popup>
                   <div className='map-popup-content'>
-                    Seen by {sighting.owner} at {sighting.sighted_at_datetime}.
+                    <p>Seen by {sighting.owner.username}</p>
+                    <p>at {sighting.sighted_at_datetime}.</p>
                   </div>
                   <Link>View sighting details</Link>
                 </Popup>

@@ -21,6 +21,7 @@ function App() {
           <Route path='/birds/:pk' element={<BirdDetails />} />
           <Route path='/add-new-sighting' element={<NewSighting />} />
         </Routes>
+        
       </Router>
     </div>
   );
