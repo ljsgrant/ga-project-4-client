@@ -77,4 +77,8 @@
     position: absolute;
     background-color: green;
   }
+  .map-popup-content {
+    display: flex;
+    flex-direction: column;
+  }
 }

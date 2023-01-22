@@ -1,6 +1,7 @@
 import '../styles/BirdDetails.scss';
 import 'leaflet/dist/leaflet.css';
 import { useState, useEffect, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
 
 import { useParams } from 'react-router';
@@ -77,7 +78,10 @@ export default function BirdDetails() {
                 position={[sighting.location_lat, sighting.location_long]}
               >
                 <Popup>
-                  Seen by {sighting.owner} at {sighting.sighted_at_datetime}
+                  <div className='map-popup-content'>
+                    Seen by {sighting.owner} at {sighting.sighted_at_datetime}.
+                  </div>
+                  <Link>View sighting details</Link>
                 </Popup>
               </Marker>
             ))}

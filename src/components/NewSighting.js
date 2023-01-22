@@ -1,13 +1,21 @@
 import 'leaflet/dist/leaflet.css';
 import '../styles/NewSighting.scss';
 import { useState, useEffect, useRef } from 'react';
-import { API } from '../lib/api';
+import { useNavigate } from 'react-router-dom';
 import { Marker, MapContainer, TileLayer } from 'react-leaflet';
 import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
+import { API } from '../lib/api';
 
 export default function NewSighting() {
+  const navigate = useNavigate();
   const [allBirds, setAllBirds] = useState(null);
-  const [formFields, setFormFields] = useState({});
+  const [formFields, setFormFields] = useState({
+    bird_sighted: null,
+    sighted_at_datetime: null,
+    location_lat: 0,
+    location_long: 0,
+    notes: ''
+  });
   const [selectedBird, setSelectedBird] = useState('');
   const [markerPosition, setMarkerPosition] = useState({
     lat: 51.53606314086357,
@@ -17,7 +25,10 @@ export default function NewSighting() {
 
   useEffect(() => {
     API.GET(API.ENDPOINTS.allBirds)
-      .then(({ data }) => setAllBirds(data))
+      .then(({ data }) => {
+        setAllBirds(data);
+        setSelectedBird(data[0].id);
+      })
       .catch((err) => console.error(err));
   }, []);
 
@@ -35,34 +46,15 @@ export default function NewSighting() {
       .then(({ data }) => {
         console.log(data);
         console.log('created sighting!');
+        navigate(`/birds/${formFields.bird_sighted}`);
       })
       .catch((error) => console.error(error));
   };
-
-  // ******************
-  // DEBUGGING
-  useEffect(() => {
-    console.log(allBirds);
-  }, [allBirds]);
-
-  useEffect(() => {
-    console.log(selectedBird);
-  }, [selectedBird]);
-
-  useEffect(() => {
-    console.log(formFields);
-  }, [formFields]);
-
-  // useEffect(() => {
-  //   console.log(markerPosition);
-  // }, [markerPosition]);
-  // ******************
 
   function movedMarker(event) {
     const marker = markerRef.current;
     if (marker != null) {
       setMarkerPosition(marker.getLatLng());
-      console.log(marker.getLatLng().lat);
     }
   }
 
@@ -88,6 +80,26 @@ export default function NewSighting() {
     handleTextChange(event);
   };
 
+  // ******************
+  //#region UNCOMMENT FOR DEBUGGING
+  // useEffect(() => {
+  //   console.log(allBirds);
+  // }, [allBirds]);
+
+  // useEffect(() => {
+  //   console.log(selectedBird);
+  // }, [selectedBird]);
+
+  // useEffect(() => {
+  //   console.log(formFields);
+  // }, [formFields]);
+
+  // useEffect(() => {
+  //   console.log(markerPosition);
+  // }, [markerPosition]);
+  //#endregion
+  // ******************
+
   return (
     <>
       <div className='NewSighting'>
@@ -101,6 +113,9 @@ export default function NewSighting() {
               onChange={handleSelect}
               name='bird_sighted'
             >
+              <option disabled selected value={null}>
+                None selected
+              </option>
               {allBirds?.map((bird) => (
                 <option key={bird.id} value={bird.id}>
                   {bird.name}
@@ -122,6 +137,7 @@ export default function NewSighting() {
                 name='lat'
                 onChange={handleLatLongTextChange}
                 value={markerPosition.lat}
+                required
               />
               <label htmlFor='long'>Longitude:</label>
               <input
@@ -129,6 +145,7 @@ export default function NewSighting() {
                 name='lng'
                 onChange={handleLatLongTextChange}
                 value={markerPosition.lng}
+                required
               />
             </div>
             <label htmlFor='notes'>Notes</label>
