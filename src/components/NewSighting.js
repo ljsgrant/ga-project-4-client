@@ -15,7 +15,15 @@ export default function NewSighting() {
   });
   const markerRef = useRef(null);
 
-  const handleTextChange = (event) => {};
+  useEffect(() => {
+    API.GET(API.ENDPOINTS.allBirds)
+      .then(({ data }) => setAllBirds(data))
+      .catch((err) => console.error(err));
+  }, []);
+
+  const handleTextChange = (event) => {
+    setFormFields({ ...formFields, [event.target.name]: event.target.value });
+  };
 
   const handleBirdSelectChange = (event) => {
     setSelectedBird(event.target.value);
@@ -23,13 +31,13 @@ export default function NewSighting() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    API.POST(API.ENDPOINTS.sightings, formFields, API.getHeaders())
+      .then(({ data }) => {
+        console.log(data);
+        console.log('created sighting!');
+      })
+      .catch((error) => console.error(error));
   };
-
-  useEffect(() => {
-    API.GET(API.ENDPOINTS.allBirds)
-      .then(({ data }) => setAllBirds(data))
-      .catch((err) => console.error(err));
-  }, []);
 
   // ******************
   // DEBUGGING
@@ -41,15 +49,20 @@ export default function NewSighting() {
     console.log(selectedBird);
   }, [selectedBird]);
 
+  useEffect(() => {
+    console.log(formFields);
+  }, [formFields]);
+
   // useEffect(() => {
   //   console.log(markerPosition);
   // }, [markerPosition]);
   // ******************
 
-  function moveMarker(event) {
+  function movedMarker(event) {
     const marker = markerRef.current;
     if (marker != null) {
       setMarkerPosition(marker.getLatLng());
+      console.log(marker.getLatLng().lat);
     }
   }
 
@@ -62,6 +75,19 @@ export default function NewSighting() {
     }
   };
 
+  useEffect(() => {
+    setFormFields({
+      ...formFields,
+      location_lat: markerPosition.lat,
+      location_long: markerPosition.lng
+    });
+  }, [markerPosition]);
+
+  const handleSelect = (event) => {
+    handleBirdSelectChange(event);
+    handleTextChange(event);
+  };
+
   return (
     <>
       <div className='NewSighting'>
@@ -72,7 +98,8 @@ export default function NewSighting() {
             <select
               id='select-bird'
               value={selectedBird}
-              onChange={handleBirdSelectChange}
+              onChange={handleSelect}
+              name='bird_sighted'
             >
               {allBirds?.map((bird) => (
                 <option key={bird.id} value={bird.id}>
@@ -88,7 +115,22 @@ export default function NewSighting() {
               onChange={handleTextChange}
               required
             />
-
+            <div className='lat-long-inputs'>
+              <label htmlFor='lat'>Latitude:</label>
+              <input
+                id='lat'
+                name='lat'
+                onChange={handleLatLongTextChange}
+                value={markerPosition.lat}
+              />
+              <label htmlFor='long'>Longitude:</label>
+              <input
+                id='long'
+                name='lng'
+                onChange={handleLatLongTextChange}
+                value={markerPosition.lng}
+              />
+            </div>
             <label htmlFor='notes'>Notes</label>
             <textarea
               id='notes'
@@ -116,24 +158,10 @@ export default function NewSighting() {
               position={markerPosition}
               ref={markerRef}
               eventHandlers={{
-                dragend: moveMarker
+                dragend: movedMarker
               }}
             ></Marker>
           </MapContainer>
-          <label htmlFor='lat'>Latitude:</label>
-          <input
-            id='lat'
-            name='lat'
-            onChange={handleLatLongTextChange}
-            value={markerPosition.lat}
-          />
-          <label htmlFor='long'>Longitude:</label>
-          <input
-            id='long'
-            name='lng'
-            onChange={handleLatLongTextChange}
-            value={markerPosition.lng}
-          />
         </div>
       </div>
     </>
