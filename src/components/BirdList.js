@@ -16,15 +16,22 @@ export default function BirdList() {
 
   return (
     <div className='BirdList'>
-      <div className='list-headers'>
-        <h3>Bird Name</h3>
-        <h3>Latin Name</h3>
+      <div className='title-container'>
+        <h2>Browse All Birds</h2>
       </div>
-      {birdData?.map((bird) => (
-        <>
-          <BirdListCard key={bird.id} bird={bird} />
-        </>
-      ))}
+      <div className='content-container'>
+        <div className='list-container'>
+          <div className='list-headers'>
+            <h3>Bird Name</h3>
+            <h3>Latin Name</h3>
+          </div>
+          {birdData?.map((bird) => (
+            <>
+              <BirdListCard key={bird.id} bird={bird} />
+            </>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
