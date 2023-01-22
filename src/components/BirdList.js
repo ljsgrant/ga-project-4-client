@@ -1,6 +1,7 @@
+import '../styles/BirdList.scss';
 import { API } from '../lib/api';
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import BirdListCard from './BirdListCard';
 
 export default function BirdList() {
   const [birdData, setBirdData] = useState(null);
@@ -15,10 +16,14 @@ export default function BirdList() {
 
   return (
     <div className='BirdList'>
+      <div className='list-headers'>
+        <h3>Bird Name</h3>
+        <h3>Latin Name</h3>
+      </div>
       {birdData?.map((bird) => (
-        <Link to={`/birds/${bird.id}`}>
-          <p key={bird.id}>{bird.name}</p>
-        </Link>
+        <>
+          <BirdListCard key={bird.id} bird={bird} />
+        </>
       ))}
     </div>
   );

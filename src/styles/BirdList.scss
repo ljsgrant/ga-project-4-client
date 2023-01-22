@@ -1,0 +1,18 @@
+body {
+  height: 100%;
+  background-color: white;
+  .BirdList {
+    width: 50vw;
+    background-color: rgb(236, 236, 236);
+    padding: 10px;
+    overflow-y: scroll;
+    .list-headers {
+      display: flex;
+      justify-content: space-between;
+      padding: 0px 15px;
+    }
+    h3{
+      margin: 0;
+    }
+  }
+}
