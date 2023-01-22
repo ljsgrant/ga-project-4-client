@@ -5,8 +5,8 @@ const ENDPOINTS = {
   allBirds: '/api/birds/',
   searchBirds: '/api/birds/search/',
   singleBird: (pk) => `/api/birds/${pk}/`,
-  register: '/api/auth/register/',
-  login: '/api/auth/login/',
+  register: '/api/user/register/',
+  login: '/api/user/login/',
   sightings: '/api/sightings/'
 };
 
