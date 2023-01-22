@@ -1,6 +1,6 @@
 import '../styles/BirdDetails.scss';
 import 'leaflet/dist/leaflet.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
 
 import { useParams } from 'react-router';
@@ -11,21 +11,26 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 export default function BirdDetails() {
   const { pk } = useParams();
   const [birdData, setBirdData] = useState(null);
+  const [mapCenter, setMapCenter] = useState(null);
 
-  console.log(pk);
+  const successCallback = (position) => {
+    setMapCenter([position.coords.latitude, position.coords.longitude]);
+    console.log('Setting center of the map to your location');
+  };
+
+  const errorCallback = (error) => {
+    console.log(error);
+  };
+
+  useMemo(() => {
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+  }, []);
 
   useEffect(() => {
     API.GET(API.ENDPOINTS.singleBird(pk))
       .then(({ data }) => setBirdData(data))
       .catch((err) => console.error(err));
   }, [pk]);
-
-  //************************
-  // DEVELOPMENT
-  useEffect(() => {
-    console.log(birdData);
-  }, [birdData]);
-  //************************
 
   return (
     <>
@@ -53,19 +58,11 @@ export default function BirdDetails() {
           </div>
         </div>
         <div className='right-column'>
-          <div className='sightings-container'>
-            {/* {birdData?.sightings?.map((sighting) => (
-              <p key={sighting.id}>
-              {sighting.sighted_at_datetime} - {sighting.location_lat},{' '}
-              {sighting.location_long}
-              </p>
-            ))} */}
-          </div>
           <div className='map-header'>
             <h3>User sightings of the {birdData?.name}</h3>
           </div>
           <MapContainer
-            center={[51.505, -0.09]}
+            center={mapCenter ? mapCenter : [51.505, -0.09]}
             zoom={5}
             scrollWheelZoom={false}
           >
@@ -84,6 +81,9 @@ export default function BirdDetails() {
                 </Popup>
               </Marker>
             ))}
+            {birdData?.sightings.length < 1 && (
+              <p className='no-sightings-message'>No sightings yet!</p>
+            )}
           </MapContainer>
         </div>
       </div>
