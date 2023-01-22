@@ -28,6 +28,7 @@ export default function NewSighting() {
       .then(({ data }) => {
         setAllBirds(data);
         setSelectedBird(data[0].id);
+        setFormFields({ ...formFields, bird_sighted: data[0].id });
       })
       .catch((err) => console.error(err));
   }, []);
@@ -90,9 +91,9 @@ export default function NewSighting() {
   //   console.log(selectedBird);
   // }, [selectedBird]);
 
-  // useEffect(() => {
-  //   console.log(formFields);
-  // }, [formFields]);
+  useEffect(() => {
+    console.log(formFields);
+  }, [formFields]);
 
   // useEffect(() => {
   //   console.log(markerPosition);
