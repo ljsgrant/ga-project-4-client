@@ -3,6 +3,7 @@ import { AUTH } from './auth';
 
 const ENDPOINTS = {
   allBirds: '/api/birds/',
+  searchBirds: '/api/birds/search/',
   singleBird: (pk) => `/api/birds/${pk}/`,
   register: '/api/auth/register/',
   login: '/api/auth/login/',
