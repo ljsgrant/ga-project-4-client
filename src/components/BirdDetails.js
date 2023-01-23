@@ -1,5 +1,6 @@
 import '../styles/BirdDetails.scss';
 import 'leaflet/dist/leaflet.css';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
@@ -7,7 +8,6 @@ import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
 import { useParams } from 'react-router';
 import { API } from '../lib/api';
 
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 import UserSightingPhoto from './common/UserSightingPhoto';
 

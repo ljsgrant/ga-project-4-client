@@ -1,0 +1,10 @@
+.UserProfile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .leaflet-container {
+    margin-top: 3px;
+    width: 500px;
+    height: 500px;
+  }
+}
