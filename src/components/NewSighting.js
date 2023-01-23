@@ -61,11 +61,20 @@ export default function NewSighting() {
     if (event.target.checked && fileInput.files[0]) {
       EXIF.getData(fileInput.files[0], function () {
         const metadataTimestamp = EXIF.getAllTags(this).DateTime;
-        console.log(JSON.stringify(metadataTimestamp, null, '\t'));
-        setFileToUploadTimestamp(metadataTimestamp);
+        // console.log(JSON.stringify(metadataTimestamp, null, '\t'));
+
+        //format timestamp to match data from date/time input
+        const dateTimeArray = metadataTimestamp.split(' ');
+        dateTimeArray[0] = dateTimeArray[0].replaceAll(':', '-');
+        dateTimeArray[1] = dateTimeArray[1].split(':');
+        dateTimeArray[1].splice(2);
+        dateTimeArray[1] = dateTimeArray[1].join(':');
+        const dataFormatTimestamp = dateTimeArray.join('T');
+
+        setFileToUploadTimestamp(dataFormatTimestamp);
         setFormFields({
           ...formFields,
-          sighted_at_datetime: metadataTimestamp
+          sighted_at_datetime: dataFormatTimestamp
         });
       });
     } else {
@@ -210,7 +219,7 @@ export default function NewSighting() {
                 type='file'
                 id='sighting-photo-upload'
                 name='sighting-photo-upload'
-                accept='image/png, image/jpeg'
+                accept='image/png, image/jpeg, image/tiff'
                 onChange={handleFileChange}
                 ref={fileInputRef}
               ></input>
