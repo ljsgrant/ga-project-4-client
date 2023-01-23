@@ -24,6 +24,11 @@ export default function Navbar() {
           <li>
             <Link to='/birds'>Birds</Link>
           </li>
+          {isLoggedIn && (
+            <li>
+              <Link to='/add-new-sighting'>Post New Sighting</Link>
+            </li>
+          )}
           {isLoggedIn ? (
             <li>
               <button onClick={logout}>Log Out</button>

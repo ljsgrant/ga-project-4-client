@@ -1,9 +1,14 @@
 import axios from 'axios';
+import { AUTH } from './auth';
 
 const ENDPOINTS = {
   allBirds: '/api/birds/',
-  register: '/api/auth/register/',
-  login: '/api/auth/login/'
+  searchBirds: '/api/birds/search/',
+  singleBird: (pk) => `/api/birds/${pk}/`,
+  register: '/api/user/register/',
+  login: '/api/user/login/',
+  singleUser: (pk) => `/api/user/${pk}/`,
+  sightings: '/api/sightings/'
 };
 
 const GET = (endpoint) => axios.get(endpoint);
@@ -12,4 +17,8 @@ const POST = (endpoint, body, headers) =>
 const PUT = (endpoint, body, headers) => axios.put(endpoint, body, headers);
 const DELETE = (endpoint, headers) => axios.delete(endpoint, headers);
 
-export const API = { ENDPOINTS, GET, POST, PUT, DELETE };
+const getHeaders = () => ({
+  headers: { Authorization: `Bearer ${AUTH.getToken()}` }
+});
+
+export const API = { ENDPOINTS, GET, POST, PUT, DELETE, getHeaders };
