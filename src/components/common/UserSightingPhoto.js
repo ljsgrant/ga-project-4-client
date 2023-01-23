@@ -1,3 +1,5 @@
+import '../../styles/UserSightingPhoto.scss'
+
 import { AdvancedImage } from '@cloudinary/react';
 import { Cloudinary } from '@cloudinary/url-gen';
 
@@ -18,19 +20,17 @@ export default function UserSightingPhoto({
   });
 
   const myImage = cld.image(cloudinaryImageId);
-
-  myImage
-    .resize(
-      thumbnail()
-        .width(imageWidth)
-        .height(imageHeight)
-        .gravity(focusOn(FocusOn.face()))
-    ) // Crop the image, focusing on the face.
-    .roundCorners(byRadius(50));
+  console.log(myImage);
+  // myImage.resize(
+  //   thumbnail().width(imageWidth).height(imageHeight)
+    //     .gravity(focusOn(FocusOn.face()))
+  // );
+  // Crop the image, focusing on the face.
+  // .roundCorners(byRadius(50));
 
   return (
-    <div>
-      <AdvancedImage cldImg={myImage} />
+    <div className='UserSightingPhoto'>
+      <AdvancedImage className='sighting-image' cldImg={myImage} />
     </div>
   );
 }

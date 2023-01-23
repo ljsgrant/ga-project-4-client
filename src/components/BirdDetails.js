@@ -83,7 +83,7 @@ export default function BirdDetails() {
                   <div className='map-popup-content'>
                     <p>Seen by {sighting.owner.username}</p>
                     <p>at {sighting.sighted_at_datetime}.</p>
-                    <UserSightingPhoto className='UserSightingPhoto' cloudinaryImageId={sighting.image} imageWidth={190} imageHeight={190} />
+                    <UserSightingPhoto className='UserSightingPhoto' cloudinaryImageId={sighting.image} imageWidth={180} imageHeight={180} />
                   </div>
                   <Link>View sighting details</Link>
                 </Popup>
