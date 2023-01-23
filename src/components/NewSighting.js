@@ -5,10 +5,17 @@ import { useNavigate } from 'react-router-dom';
 import { Marker, MapContainer, TileLayer } from 'react-leaflet';
 import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
 import { API } from '../lib/api';
-import { Resource } from '@cloudinary/react';
+import EXIF from 'exif-js';
 
 export default function NewSighting() {
   const navigate = useNavigate();
+  const markerRef = useRef(null);
+  const fileInputRef = useRef(null);
+  const [markerPosition, setMarkerPosition] = useState({
+    lat: 51.53606314086357,
+    lng: -0.3515625
+  });
+
   const [allBirds, setAllBirds] = useState(null);
   const [formFields, setFormFields] = useState({
     bird_sighted: null,
@@ -20,12 +27,8 @@ export default function NewSighting() {
   });
   const [selectedBird, setSelectedBird] = useState('');
   const [fileToUpload, setFileToUpload] = useState('');
+  const [fileToUploadTimestamp, setFileToUploadTimestamp] = useState('');
   const [isDateTimeInputDisabled, setIsDateTimeInputDisabled] = useState(false);
-  const [markerPosition, setMarkerPosition] = useState({
-    lat: 51.53606314086357,
-    lng: -0.3515625
-  });
-  const markerRef = useRef(null);
 
   useEffect(() => {
     API.GET(API.ENDPOINTS.allBirds)
@@ -49,6 +52,28 @@ export default function NewSighting() {
   const handleFileChange = (event) => {
     event.preventDefault();
     setFileToUpload(event.target.files[0]);
+  };
+
+  const handleDateTimeCheckbox = (event) => {
+    setIsDateTimeInputDisabled(event.target.checked);
+
+    const fileInput = fileInputRef.current;
+    if (event.target.checked && fileInput.files[0]) {
+      EXIF.getData(fileInput.files[0], function () {
+        const metadataTimestamp = EXIF.getAllTags(this).DateTime;
+        console.log(JSON.stringify(metadataTimestamp, null, '\t'));
+        setFileToUploadTimestamp(metadataTimestamp);
+        setFormFields({
+          ...formFields,
+          sighted_at_datetime: metadataTimestamp
+        });
+      });
+    } else {
+      setFormFields({
+        ...formFields,
+        sighted_at_datetime: null
+      });
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -115,17 +140,15 @@ export default function NewSighting() {
     handleTextChange(event);
   };
 
-  const handleUseMetadataDateTime = async () => {};
-
-  const handleDateTimeCheckbox = (event) => {
-    setIsDateTimeInputDisabled(event.target.checked);
-  };
+  // const handleUseMetadataDateTime = async () => {
+  //   setFormFields({ ...formFields, sighted_at_datetime: null });
+  // };
 
   // ******************
   //#region UNCOMMENT FOR DEBUGGING
   useEffect(() => {
-    console.log(isDateTimeInputDisabled);
-  }, [isDateTimeInputDisabled]);
+    console.log(formFields);
+  }, [formFields]);
   //#endregion
   // ******************
 
@@ -150,14 +173,18 @@ export default function NewSighting() {
             </select>
             <label htmlFor='sighted-at-datetime'>Date & time seen:</label>
             <div className='datetime-wrapper'>
-              <input
-                id='sighted-at-datetime'
-                name='sighted_at_datetime'
-                type='datetime-local'
-                onChange={handleTextChange}
-                disabled={isDateTimeInputDisabled}
-                required
-              />
+              {isDateTimeInputDisabled ? (
+                <p>{formFields.sighted_at_datetime}</p>
+              ) : (
+                <input
+                  id='sighted-at-datetime'
+                  name='sighted_at_datetime'
+                  type='datetime-local'
+                  onChange={handleTextChange}
+                  disabled={isDateTimeInputDisabled}
+                  required
+                />
+              )}
             </div>
             <div className='lat-long-inputs'>
               <label htmlFor='lat'>Latitude:</label>
@@ -185,18 +212,18 @@ export default function NewSighting() {
                 name='sighting-photo-upload'
                 accept='image/png, image/jpeg'
                 onChange={handleFileChange}
+                ref={fileInputRef}
               ></input>
               {fileToUpload && (
                 <>
                   <label htmlFor='datetime-metadata-checkbox'>
-                    Use photo metadata for sighting timestamp?
+                    Use JPEG metadata for sighting timestamp?
                   </label>
                   <input
                     type='checkbox'
                     id='datetime-metadata-checkbox'
                     name='datetime-metadata-checkbox'
                     onChange={handleDateTimeCheckbox}
-                    disabled={fileToUpload ? false : true}
                   />
                 </>
               )}
