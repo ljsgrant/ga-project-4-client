@@ -45,7 +45,7 @@ export default function BirdList() {
         </div>
         <div className='list-container'>
           <div className='list-headers'>
-            <h3>Bird Name</h3>
+            <h3>Common Name</h3>
             <h3>Latin Name</h3>
           </div>
           {birdData?.map((bird) => (

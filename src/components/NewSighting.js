@@ -31,7 +31,7 @@ export default function NewSighting() {
         setFormFields({ ...formFields, bird_sighted: data[0].id });
       })
       .catch((err) => console.error(err));
-  }, []);
+  });
 
   const handleTextChange = (event) => {
     setFormFields({ ...formFields, [event.target.name]: event.target.value });
@@ -74,7 +74,7 @@ export default function NewSighting() {
       location_lat: markerPosition.lat,
       location_long: markerPosition.lng
     });
-  }, [markerPosition]);
+  }, [markerPosition, formFields]);
 
   const handleSelect = (event) => {
     handleBirdSelectChange(event);
