@@ -6,6 +6,7 @@ import { AUTH } from '../lib/auth';
 export default function UserProfile() {
   const { pk } = useParams();
   const [userData, setUserData] = useState(null);
+  console.log(AUTH.getPayload());
 
   useEffect(() => {
     API.GET(API.ENDPOINTS.singleUser(pk))

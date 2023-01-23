@@ -47,6 +47,9 @@ export default function Navbar() {
           <li>
             <Link to='/admin'> Admin Controls</Link>
           </li>
+          <li>
+            <Link to={`/user/${AUTH.getPayload().sub}`}>Your Profile</Link>
+          </li>
         </ul>
       </div>
     </div>
