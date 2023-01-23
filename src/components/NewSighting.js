@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Marker, MapContainer, TileLayer } from 'react-leaflet';
 import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
 import { API } from '../lib/api';
+import { Resource } from '@cloudinary/react';
 
 export default function NewSighting() {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ export default function NewSighting() {
   });
   const [selectedBird, setSelectedBird] = useState('');
   const [fileToUpload, setFileToUpload] = useState('');
+  const [isDateTimeInputDisabled, setIsDateTimeInputDisabled] = useState(false);
   const [markerPosition, setMarkerPosition] = useState({
     lat: 51.53606314086357,
     lng: -0.3515625
@@ -63,6 +65,7 @@ export default function NewSighting() {
         API.ENDPOINTS.cloudinary,
         imageData
       );
+      console.log(cloudinaryResponse.data);
       const imageId = cloudinaryResponse.data.public_id;
       const requestBody = {
         ...formFields,
@@ -112,27 +115,17 @@ export default function NewSighting() {
     handleTextChange(event);
   };
 
+  const handleUseMetadataDateTime = async () => {};
+
+  const handleDateTimeCheckbox = (event) => {
+    setIsDateTimeInputDisabled(event.target.checked);
+  };
+
   // ******************
   //#region UNCOMMENT FOR DEBUGGING
-  // useEffect(() => {
-  //   console.log(allBirds);
-  // }, [allBirds]);
-
-  // useEffect(() => {
-  //   console.log(selectedBird);
-  // }, [selectedBird]);
-
   useEffect(() => {
-    console.log(formFields);
-  }, [formFields]);
-
-  // useEffect(() => {
-  //   console.log(markerPosition);
-  // }, [markerPosition]);
-
-  // useEffect(() => {
-  //   console.log(fileToUpload);
-  // }, [fileToUpload]);
+    console.log(isDateTimeInputDisabled);
+  }, [isDateTimeInputDisabled]);
   //#endregion
   // ******************
 
@@ -156,13 +149,16 @@ export default function NewSighting() {
               ))}
             </select>
             <label htmlFor='sighted-at-datetime'>Date & time seen:</label>
-            <input
-              id='sighted-at-datetime'
-              name='sighted_at_datetime'
-              type='datetime-local'
-              onChange={handleTextChange}
-              required
-            />
+            <div className='datetime-wrapper'>
+              <input
+                id='sighted-at-datetime'
+                name='sighted_at_datetime'
+                type='datetime-local'
+                onChange={handleTextChange}
+                disabled={isDateTimeInputDisabled}
+                required
+              />
+            </div>
             <div className='lat-long-inputs'>
               <label htmlFor='lat'>Latitude:</label>
               <input
@@ -190,6 +186,20 @@ export default function NewSighting() {
                 accept='image/png, image/jpeg'
                 onChange={handleFileChange}
               ></input>
+              {fileToUpload && (
+                <>
+                  <label htmlFor='datetime-metadata-checkbox'>
+                    Use photo metadata for sighting timestamp?
+                  </label>
+                  <input
+                    type='checkbox'
+                    id='datetime-metadata-checkbox'
+                    name='datetime-metadata-checkbox'
+                    onChange={handleDateTimeCheckbox}
+                    disabled={fileToUpload ? false : true}
+                  />
+                </>
+              )}
               <p>
                 <em>
                   This isn't required, but we encourage it as proof of the
