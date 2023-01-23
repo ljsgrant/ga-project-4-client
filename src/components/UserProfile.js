@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { API } from '../lib/api';
+import { AUTH } from '../lib/auth';
 
 export default function UserProfile() {
   const { pk } = useParams();
@@ -11,6 +12,7 @@ export default function UserProfile() {
       .then(({ data }) => setUserData(data))
       .catch((err) => console.error(err));
   }, [pk]);
+
 
   useEffect(() => {
     console.log(userData);

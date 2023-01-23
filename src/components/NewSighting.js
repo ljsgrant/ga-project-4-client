@@ -61,7 +61,6 @@ export default function NewSighting() {
     if (event.target.checked && fileInput.files[0]) {
       EXIF.getData(fileInput.files[0], function () {
         const metadataTimestamp = EXIF.getAllTags(this).DateTime;
-        // console.log(JSON.stringify(metadataTimestamp, null, '\t'));
 
         //format timestamp to match data from date/time input
         const dateTimeArray = metadataTimestamp.split(' ');
@@ -183,7 +182,16 @@ export default function NewSighting() {
             <label htmlFor='sighted-at-datetime'>Date & time seen:</label>
             <div className='datetime-wrapper'>
               {isDateTimeInputDisabled ? (
-                <p>{formFields.sighted_at_datetime}</p>
+                <p>
+                  {formFields.sighted_at_datetime &&
+                    formFields.sighted_at_datetime
+                      .split('T')[0]
+                      .split('-')
+                      .reverse()
+                      .join('/') +
+                      ' at ' +
+                      formFields.sighted_at_datetime.split('T')[1]}
+                </p>
               ) : (
                 <input
                   id='sighted-at-datetime'

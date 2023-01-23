@@ -44,6 +44,9 @@ export default function Navbar() {
               </li>
             </>
           )}
+          <li>
+            <Link to='/admin'> Admin Controls</Link>
+          </li>
         </ul>
       </div>
     </div>
