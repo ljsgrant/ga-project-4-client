@@ -8,7 +8,8 @@ const ENDPOINTS = {
   register: '/api/user/register/',
   login: '/api/user/login/',
   singleUser: (pk) => `/api/user/${pk}/`,
-  sightings: '/api/sightings/'
+  sightings: '/api/sightings/',
+  cloudinary: `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`
 };
 
 const GET = (endpoint) => axios.get(endpoint);

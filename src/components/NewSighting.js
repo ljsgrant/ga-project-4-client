@@ -14,9 +14,11 @@ export default function NewSighting() {
     sighted_at_datetime: null,
     location_lat: 0,
     location_long: 0,
-    notes: ''
+    notes: '',
+    image: ''
   });
   const [selectedBird, setSelectedBird] = useState('');
+  const [fileToUpload, setFileToUpload] = useState('');
   const [markerPosition, setMarkerPosition] = useState({
     lat: 51.53606314086357,
     lng: -0.3515625
@@ -29,9 +31,11 @@ export default function NewSighting() {
         setAllBirds(data);
         setSelectedBird(data[0].id);
         setFormFields({ ...formFields, bird_sighted: data[0].id });
+        console.log('asfasfgas');
       })
       .catch((err) => console.error(err));
-  });
+    // eslint-disable-next-line
+  }, []);
 
   const handleTextChange = (event) => {
     setFormFields({ ...formFields, [event.target.name]: event.target.value });
@@ -41,15 +45,41 @@ export default function NewSighting() {
     setSelectedBird(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleFileChange = (event) => {
     event.preventDefault();
-    API.POST(API.ENDPOINTS.sightings, formFields, API.getHeaders())
-      .then(({ data }) => {
-        console.log(data);
-        console.log('created sighting!');
-        navigate(`/birds/${formFields.bird_sighted}`);
-      })
-      .catch((error) => console.error(error));
+    setFileToUpload(event.target.files[0]);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const imageData = new FormData();
+    imageData.append('file', fileToUpload);
+    imageData.append(
+      'upload_preset',
+      process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET
+    );
+    try {
+      const cloudinaryResponse = await API.POST(
+        API.ENDPOINTS.cloudinary,
+        imageData
+      );
+      const imageId = cloudinaryResponse.data.public_id;
+      const requestBody = {
+        ...formFields,
+        image: imageId
+      };
+
+      API.POST(API.ENDPOINTS.sightings, requestBody, API.getHeaders())
+        .then(({ data }) => {
+          console.log(data);
+          console.log('created sighting!');
+          navigate(`/birds/${formFields.bird_sighted}`);
+        })
+        .catch((error) => console.error(error));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   function movedMarker(event) {
@@ -74,7 +104,8 @@ export default function NewSighting() {
       location_lat: markerPosition.lat,
       location_long: markerPosition.lng
     });
-  }, [markerPosition, formFields]);
+    // eslint-disable-next-line
+  }, [markerPosition]);
 
   const handleSelect = (event) => {
     handleBirdSelectChange(event);
@@ -91,13 +122,17 @@ export default function NewSighting() {
   //   console.log(selectedBird);
   // }, [selectedBird]);
 
-  useEffect(() => {
-    console.log(formFields);
-  }, [formFields]);
+  // useEffect(() => {
+  //   console.log(formFields);
+  // }, [formFields]);
 
   // useEffect(() => {
   //   console.log(markerPosition);
   // }, [markerPosition]);
+
+  useEffect(() => {
+    console.log(fileToUpload);
+  }, [fileToUpload]);
   //#endregion
   // ******************
 
@@ -114,9 +149,6 @@ export default function NewSighting() {
               onChange={handleSelect}
               name='bird_sighted'
             >
-              <option disabled selected value={null}>
-                None selected
-              </option>
               {allBirds?.map((bird) => (
                 <option key={bird.id} value={bird.id}>
                   {bird.name}
@@ -149,6 +181,22 @@ export default function NewSighting() {
                 required
               />
             </div>
+            <div className='photo-upload-container'>
+              <label htmlFor='sighting-photo-upload'>Upload a photo:</label>
+              <input
+                type='file'
+                id='sighting-photo-upload'
+                name='sighting-photo-upload'
+                accept='image/png, image/jpeg'
+                onChange={handleFileChange}
+              ></input>
+              <p>
+                <em>
+                  This isn't required, but we encourage it as proof of the
+                  sighting - and it's nicer for other users to look at!
+                </em>
+              </p>
+            </div>
             <label htmlFor='notes'>Notes</label>
             <textarea
               id='notes'
@@ -156,7 +204,6 @@ export default function NewSighting() {
               onChange={handleTextChange}
               required
             />
-
             <button type='submit'>Post this sighting</button>
           </form>
         </div>
