@@ -31,7 +31,6 @@ export default function NewSighting() {
         setAllBirds(data);
         setSelectedBird(data[0].id);
         setFormFields({ ...formFields, bird_sighted: data[0].id });
-        console.log('asfasfgas');
       })
       .catch((err) => console.error(err));
     // eslint-disable-next-line
@@ -69,6 +68,7 @@ export default function NewSighting() {
         ...formFields,
         image: imageId
       };
+      console.log(requestBody);
 
       API.POST(API.ENDPOINTS.sightings, requestBody, API.getHeaders())
         .then(({ data }) => {
@@ -122,17 +122,17 @@ export default function NewSighting() {
   //   console.log(selectedBird);
   // }, [selectedBird]);
 
-  // useEffect(() => {
-  //   console.log(formFields);
-  // }, [formFields]);
+  useEffect(() => {
+    console.log(formFields);
+  }, [formFields]);
 
   // useEffect(() => {
   //   console.log(markerPosition);
   // }, [markerPosition]);
 
-  useEffect(() => {
-    console.log(fileToUpload);
-  }, [fileToUpload]);
+  // useEffect(() => {
+  //   console.log(fileToUpload);
+  // }, [fileToUpload]);
   //#endregion
   // ******************
 

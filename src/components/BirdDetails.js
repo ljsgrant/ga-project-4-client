@@ -9,6 +9,8 @@ import { API } from '../lib/api';
 
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
+import UserSightingPhoto from './common/UserSightingPhoto';
+
 export default function BirdDetails() {
   const { pk } = useParams();
   const [birdData, setBirdData] = useState(null);
@@ -81,6 +83,7 @@ export default function BirdDetails() {
                   <div className='map-popup-content'>
                     <p>Seen by {sighting.owner.username}</p>
                     <p>at {sighting.sighted_at_datetime}.</p>
+                    <UserSightingPhoto className='UserSightingPhoto' cloudinaryImageId={sighting.image} imageWidth={190} imageHeight={190} />
                   </div>
                   <Link>View sighting details</Link>
                 </Popup>
