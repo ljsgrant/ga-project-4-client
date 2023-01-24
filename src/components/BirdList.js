@@ -2,10 +2,12 @@ import '../styles/BirdList.scss';
 import { API } from '../lib/api';
 import { useState, useEffect } from 'react';
 import BirdListCard from './BirdListCard';
+import { Link } from 'react-router-dom';
 
 export default function BirdList() {
   const [birdData, setBirdData] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [singleBirdData, setSingleBirdData] = useState(null);
 
   useEffect(() => {
     API.GET(API.ENDPOINTS.allBirds)
@@ -29,28 +31,64 @@ export default function BirdList() {
 
   return (
     <div className='BirdList'>
-      <div className='title-container'>
-        <h2>Browse All</h2>
-      </div>
-      <div className='content-container'>
-        <div className='search-container'>
-          <label htmlFor="search-filter-birds">Search birds: </label>
-          <input
-            id='search-filter-birds'
-            type='text'
-            value={searchTerm}
-            onChange={handleSearch}
-            className='search-input'
-          />
+      <div className='left-column'>
+        <div className='title-container'>
+          <h2>Browse All</h2>
         </div>
-        <div className='list-container'>
-          <div className='list-headers'>
-            <h3>Common Name</h3>
-            <h3>Latin Name</h3>
+        <div className='content-container'>
+          <div className='search-container'>
+            <label htmlFor='search-filter-birds'>Search birds: </label>
+            <input
+              id='search-filter-birds'
+              type='text'
+              value={searchTerm}
+              onChange={handleSearch}
+              className='search-input'
+            />
           </div>
-          {birdData?.map((bird) => (
-            <BirdListCard key={bird.id} bird={bird} />
-          ))}
+          <div className='list-container'>
+            <div className='list-headers'>
+              <h3>Common Name</h3>
+              <h3>Latin Name</h3>
+            </div>
+            {birdData?.map((bird) => (
+              <BirdListCard
+                setSingleBirdData={setSingleBirdData}
+                key={bird.id}
+                bird={bird}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className='right-column'>
+        <div className='bird-name-container'>
+          <h2>{singleBirdData?.name}</h2>
+          <h3>
+            (<em>{singleBirdData?.scientific_name}</em>)
+          </h3>
+        </div>
+        <div className='image-container'>
+          {singleBirdData && (
+            <img
+              className='bird-image'
+              src={singleBirdData?.image}
+              alt={singleBirdData.name}
+            />
+          )}
+        </div>
+
+        <div className='info-container'>
+          <p>{singleBirdData?.description}</p>
+        </div>
+        <div>
+          <Link
+            className='view-sightings-link'
+            to={`/birds/${singleBirdData?.id}`}
+          >
+            <p>View Sightings</p>
+            <p>></p>
+          </Link>
         </div>
       </div>
     </div>
