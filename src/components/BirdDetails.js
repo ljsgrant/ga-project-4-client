@@ -84,7 +84,13 @@ export default function BirdDetails({ setBirdName }) {
               >
                 <Popup>
                   <div className='map-popup-content'>
-                    <p>Seen by {sighting.owner.username}</p>
+                    <p>
+                      Seen by{' '}
+                      <Link to={`/user/${sighting.owner.id}`}>
+                        {sighting.owner.username}
+                      </Link>
+                    </p>
+
                     <p>at {sighting.sighted_at_datetime}.</p>
                     <UserSightingPhoto
                       className='UserSightingPhoto'

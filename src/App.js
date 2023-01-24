@@ -45,7 +45,14 @@ function App() {
               <PageTitle titleText={'Birds'} content={<BirdList />}></PageTitle>
             }
           />
-          <Route path='/birds/:pk' element={<BirdDetails />} />
+          <Route
+            path='/birds/:pk'
+            element={
+              <PageTitle
+                content={<BirdDetails />}
+              ></PageTitle>
+            }
+          />
           <Route
             path='/add-new-sighting'
             element={
