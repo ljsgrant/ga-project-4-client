@@ -2,8 +2,6 @@
 
 $BirdList-height: calc(99vh - $navbar-height - $page-title-height);
 $content-container-height: calc($BirdList-height - 150px);
-$title-container-height: 70px;
-
 
 .BirdList {
   height: $BirdList-height;

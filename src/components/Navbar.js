@@ -3,10 +3,9 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuthenticated } from '../hooks/useAuthenticated';
 import { AUTH } from '../lib/auth';
 
-
 export default function Navbar() {
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useAuthenticated();  
+  const [isLoggedIn, setIsLoggedIn, isAdmin] = useAuthenticated();
 
   const logout = () => {
     AUTH.deleteToken();
@@ -41,12 +40,14 @@ export default function Navbar() {
               </li>
             )}
 
-            <li>
-              <Link className='nav-link' to='/admin'>
-                {' '}
-                Admin Controls
-              </Link>
-            </li>
+            {isAdmin && (
+              <li>
+                <Link className='nav-link' to='/admin'>
+                  {' '}
+                  Admin Controls
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
         <div className='nav-right'>

@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 
 export default function BirdListCard({ bird, setSingleBirdData }) {
   const handleMouseEnter = () => {
-    console.log(bird.name);
-    setSingleBirdData(bird)
+    setSingleBirdData(bird);
   };
 
   // const handleMouseLeave = () => {

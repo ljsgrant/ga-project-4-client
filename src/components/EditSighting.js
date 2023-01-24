@@ -2,7 +2,7 @@ import 'leaflet/dist/leaflet.css';
 import '../styles/NewSighting.scss';
 import '../styles/common/containerStyles.scss';
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuthenticated } from '../hooks/useAuthenticated';
 import { Marker, MapContainer, TileLayer } from 'react-leaflet';
 import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
@@ -10,16 +10,19 @@ import PageMessage from './common/PageMessage';
 import { API } from '../lib/api';
 import EXIF from 'exif-js';
 
-export default function NewSighting() {
+export default function EditSighting() {
   const navigate = useNavigate();
   const [isLoggedIn] = useAuthenticated();
+  const { id } = useParams();
   const markerRef = useRef(null);
   const fileInputRef = useRef(null);
+
   const [markerPosition, setMarkerPosition] = useState({
     lat: 51.53606314086357,
     lng: -0.3515625
   });
 
+  const [initialSightingData, setInitialSightingData] = useState(null);
   const [allBirds, setAllBirds] = useState(null);
   const [formFields, setFormFields] = useState({
     bird_sighted: null,
@@ -32,6 +35,14 @@ export default function NewSighting() {
   const [selectedBird, setSelectedBird] = useState('');
   const [fileToUpload, setFileToUpload] = useState('');
   const [isDateTimeInputDisabled, setIsDateTimeInputDisabled] = useState(false);
+
+  useEffect(() => {
+    API.GET(API.ENDPOINTS.singleSighting(id))
+      .then(({ data }) => {
+        setInitialSightingData(data);
+      })
+      .catch((err) => console.error(err));
+  }, [id]);
 
   useEffect(() => {
     API.GET(API.ENDPOINTS.allBirds)

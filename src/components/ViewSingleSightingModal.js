@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { API } from '../lib/api';
 import UserSightingPhoto from './common/UserSightingPhoto';
+import { Link } from 'react-router-dom';
 
 export default function ViewSingleSightingModal({
   setIsModalOpen,
@@ -35,7 +36,9 @@ export default function ViewSingleSightingModal({
             <p>Sighting recorded by {sightingData?.owner.username}</p>
           </div>
           <div className='modal-controls'>
-            <button>Edit Sighting</button>
+            <Link to={`/edit-sighting/${sightingData?.id}`}>
+              <button onClick={handleClose}>Edit Sighting</button>
+            </Link>
             <button>Delete Sighting</button>
           </div>
           <div className='modal-content'>
@@ -43,7 +46,10 @@ export default function ViewSingleSightingModal({
               {sightingData?.image === '0' ? (
                 <p>(No photo was added for this sighting)</p>
               ) : (
-                <UserSightingPhoto className='photo-component' cloudinaryImageId={sightingData?.image} />
+                <UserSightingPhoto
+                  className='photo-component'
+                  cloudinaryImageId={sightingData?.image}
+                />
               )}
             </div>
             <div className='info-container'>

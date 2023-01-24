@@ -1,5 +1,5 @@
 import './styles/FontStyles.scss';
-import './styles/App.scss'
+import './styles/App.scss';
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -8,6 +8,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import BirdDetails from './components/BirdDetails';
 import NewSighting from './components/NewSighting';
+import EditSighting from './components/EditSighting';
 import UserProfile from './components/UserProfile';
 import AdminControls from './components/admin/AdminControls';
 import NewBird from './components/admin/NewBird';
@@ -76,6 +77,15 @@ function App() {
               <PageTitle
                 titleText={'New Sighting'}
                 content={<NewSighting />}
+              ></PageTitle>
+            }
+          />
+          <Route
+            path='/edit-sighting/:id'
+            element={
+              <PageTitle
+                titleText={'Edit Sighting'}
+                content={<EditSighting />}
               ></PageTitle>
             }
           />
