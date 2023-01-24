@@ -27,7 +27,6 @@ export default function NewSighting() {
   });
   const [selectedBird, setSelectedBird] = useState('');
   const [fileToUpload, setFileToUpload] = useState('');
-  const [fileToUploadTimestamp, setFileToUploadTimestamp] = useState('');
   const [isDateTimeInputDisabled, setIsDateTimeInputDisabled] = useState(false);
 
   useEffect(() => {
@@ -69,8 +68,6 @@ export default function NewSighting() {
         dateTimeArray[1].splice(2);
         dateTimeArray[1] = dateTimeArray[1].join(':');
         const dataFormatTimestamp = dateTimeArray.join('T');
-
-        setFileToUploadTimestamp(dataFormatTimestamp);
         setFormFields({
           ...formFields,
           sighted_at_datetime: dataFormatTimestamp

@@ -1,13 +1,10 @@
 import 'leaflet/dist/leaflet.css';
 import '../styles/NewSighting.scss';
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Marker, MapContainer, TileLayer } from 'react-leaflet';
-import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
 import { API } from '../lib/api';
-import EXIF from 'exif-js';
 
-export default function NewSighting() {
+export default function NewBird() {
   const navigate = useNavigate();
 
   const [formFields, setFormFields] = useState({

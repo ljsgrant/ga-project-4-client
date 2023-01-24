@@ -6,6 +6,8 @@ import Register from './components/Register';
 import BirdDetails from './components/BirdDetails';
 import NewSighting from './components/NewSighting';
 import UserProfile from './components/UserProfile';
+import AdminControls from './components/AdminControls';
+import NewBird from './components/NewBird';
 
 window.Buffer = window.Buffer || require('buffer').Buffer;
 
@@ -16,6 +18,8 @@ function App() {
         <Navbar />
         <Routes>
           <Route path='/' element={<div>Home</div>} />
+          <Route path='/admin' element={<AdminControls />} />
+          <Route path='/admin/new-bird' element={<NewBird />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/user/:pk' element={<UserProfile />} />

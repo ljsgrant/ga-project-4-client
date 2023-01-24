@@ -1,10 +1,19 @@
 .UserProfile {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  padding-top: 60px;
+  p,
+  h2,
+  h3 {
+    margin: 0;
+  }
   .leaflet-container {
     margin-top: 3px;
     width: 500px;
     height: 500px;
+    border-radius: 10px;
+  }
+  .right-column {
+    width: 500px;
   }
 }

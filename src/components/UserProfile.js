@@ -25,42 +25,60 @@ export default function UserProfile() {
 
   return (
     <div className='UserProfile'>
-      <h3>{userData?.username}'s Profile Page</h3>
-      <p>
-        Full name: {userData?.first_name} {userData?.last_name}
-      </p>
-      <p>User ID: {pk}</p>
-      <MapContainer center={[51.505, -0.09]} zoom={5} scrollWheelZoom={false}>
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-        />
-        {userData?.sightings?.map((sighting) => (
-          <Marker
-            key={sighting.id}
-            icon={DefaultMarkerIcon}
-            position={[sighting.location_lat, sighting.location_long]}
-          >
-            <Popup>
-              <div className='map-popup-content'>
-                <h4>{sighting?.bird_sighted.name}</h4>
-                <p>Seen by {sighting.owner.username}</p>
-                <p>at {sighting.sighted_at_datetime}.</p>
-                <UserSightingPhoto
-                  className='UserSightingPhoto'
-                  cloudinaryImageId={sighting.image}
-                  imageWidth={180}
-                  imageHeight={180}
-                />
-              </div>
-              <Link>View sighting details</Link>
-            </Popup>
-          </Marker>
-        ))}
-        {userData?.sightings.length < 1 && (
-          <p className='no-sightings-message'>No sightings yet!</p>
-        )}
-      </MapContainer>
+      <div className='left-column'>
+        <h3>{userData?.username}'s sightings</h3>
+        <MapContainer center={[51.505, -0.09]} zoom={5} scrollWheelZoom={false}>
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+          />
+          {userData?.sightings?.map((sighting) => (
+            <Marker
+              key={sighting.id}
+              icon={DefaultMarkerIcon}
+              position={[sighting.location_lat, sighting.location_long]}
+            >
+              <Popup>
+                <div className='map-popup-content'>
+                  <Link to={`/birds/${sighting?.bird_sighted.id}`}>
+                    <h4>{sighting?.bird_sighted.name}</h4>
+                  </Link>
+                  <p>
+                    Seen at{' '}
+                    {sighting?.sighted_at_datetime.split('T')[1].substr(0, 5)}{' '}
+                    on{' '}
+                    {sighting?.sighted_at_datetime
+                      .split('T')[0]
+                      .substr(0, 10)
+                      .split('-')
+                      .reverse()
+                      .join('/')}
+                    .
+                  </p>
+                  <UserSightingPhoto
+                    className='UserSightingPhoto'
+                    cloudinaryImageId={sighting?.image}
+                    imageWidth={180}
+                    imageHeight={180}
+                  />
+                </div>
+                <Link>View sighting details</Link>
+              </Popup>
+            </Marker>
+          ))}
+          {userData?.sightings.length < 1 && (
+            <p className='no-sightings-message'>No sightings yet!</p>
+          )}
+        </MapContainer>
+      </div>
+      <div className='right-column'>
+        <h3>{userData?.username}'s info</h3>
+        <p>
+          Full name: {userData?.first_name} {userData?.last_name}
+        </p>
+        <p>User ID: {userData?.id}</p>
+        <p>First joined (dd/mm/yyyy): {userData?.date_joined}</p>
+      </div>
     </div>
   );
 }
