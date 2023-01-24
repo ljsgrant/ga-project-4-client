@@ -17,41 +17,66 @@ export default function Navbar() {
   return (
     <div className='Navbar'>
       <div className='nav-left'>
+        <div className='site-title-wrapper'>
+          <h1>birdl</h1>
+        </div>
         <ul>
           <li>
-            <Link to='/'>Home</Link>
+            <Link className='nav-link' to='/'>
+              Home
+            </Link>
           </li>
           <li>
-            <Link to='/birds'>Birds</Link>
+            <Link className='nav-link' to='/birds'>
+              Birds
+            </Link>
           </li>
           {isLoggedIn && (
             <li>
-              <Link to='/add-new-sighting'>Post New Sighting</Link>
+              <Link className='nav-link' to='/add-new-sighting'>
+                Post New Sighting
+              </Link>
             </li>
           )}
+
+          <li>
+            <Link className='nav-link' to='/admin'>
+              {' '}
+              Admin Controls
+            </Link>
+          </li>
+        </ul>
+      </div>
+      <div className='nav-right'>
+        <ul>
           {isLoggedIn ? (
-            <li>
-              <button onClick={logout}>Log Out</button>
-            </li>
+            <>
+              <li>
+                <Link
+                  className='nav-link'
+                  to={`/user/${AUTH.getPayload().sub}`}
+                >
+                  Your Profile
+                </Link>
+              </li>
+              <li>
+                <button onClick={logout}>Log Out</button>
+              </li>
+            </>
           ) : (
             <>
               {' '}
               <li>
-                <Link to='/login'>Log In</Link>
+                <Link className='nav-link' to='/login'>
+                  Log In
+                </Link>
               </li>
               <li>
-                <Link to='/register'>Register</Link>
+                <Link className='nav-link' to='/register'>
+                  Register
+                </Link>
               </li>
             </>
-          )}
-          <li>
-            <Link to='/admin'> Admin Controls</Link>
-          </li>
-
-          {isLoggedIn && (
-            <li>
-              <Link to={`/user/${AUTH.getPayload().sub}`}>Your Profile</Link>
-            </li>
           )}
         </ul>
       </div>

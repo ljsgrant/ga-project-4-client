@@ -30,7 +30,7 @@ export default function BirdList() {
   return (
     <div className='BirdList'>
       <div className='title-container'>
-        <h2>Browse All Birds</h2>
+        <h2>Browse All</h2>
       </div>
       <div className='content-container'>
         <div className='search-container'>

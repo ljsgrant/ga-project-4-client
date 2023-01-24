@@ -8,10 +8,9 @@ import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
 import { useParams } from 'react-router';
 import { API } from '../lib/api';
 
-
 import UserSightingPhoto from './common/UserSightingPhoto';
 
-export default function BirdDetails() {
+export default function BirdDetails({ setBirdName }) {
   const { pk } = useParams();
   const [birdData, setBirdData] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
@@ -31,7 +30,10 @@ export default function BirdDetails() {
 
   useEffect(() => {
     API.GET(API.ENDPOINTS.singleBird(pk))
-      .then(({ data }) => setBirdData(data))
+      .then(({ data }) => {
+        setBirdData(data);
+        setBirdName(data.name);
+      })
       .catch((err) => console.error(err));
   }, [pk]);
 
@@ -57,6 +59,7 @@ export default function BirdDetails() {
             />
           </div>
           <div className='info-text-container'>
+            <h4>Description</h4>
             <p>{birdData?.description}</p>
           </div>
         </div>
@@ -83,7 +86,12 @@ export default function BirdDetails() {
                   <div className='map-popup-content'>
                     <p>Seen by {sighting.owner.username}</p>
                     <p>at {sighting.sighted_at_datetime}.</p>
-                    <UserSightingPhoto className='UserSightingPhoto' cloudinaryImageId={sighting.image} imageWidth={180} imageHeight={180} />
+                    <UserSightingPhoto
+                      className='UserSightingPhoto'
+                      cloudinaryImageId={sighting.image}
+                      imageWidth={180}
+                      imageHeight={180}
+                    />
                   </div>
                   <Link>View sighting details</Link>
                 </Popup>

@@ -161,7 +161,6 @@ export default function NewSighting() {
     <>
       <div className='NewSighting'>
         <div className='left-column'>
-          <h2>New Sighting</h2>
           <form className='sighting-form' onSubmit={handleSubmit}>
             <label htmlFor='select-bird'>Bird</label>
             <select

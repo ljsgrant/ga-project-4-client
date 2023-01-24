@@ -1,1 +1,3 @@
-export default function AdminControls() {}
+export default function AdminControls() {
+  return <p>Admin controls</p>
+}
