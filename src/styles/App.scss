@@ -1,0 +1,12 @@
+#app{
+  min-height: 100vh;
+  max-height: 100vh;
+  border: 5px solid pink;
+  box-sizing: border-box;
+  // overflow-y:hidden;
+}
+html,
+body {
+   margin: 0;
+   padding: 0;
+}

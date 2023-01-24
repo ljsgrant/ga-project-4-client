@@ -17,8 +17,6 @@ const getPayload = () => {
     return false;
   }
 
-  console.log(tokenParts)
-
   return JSON.parse(Buffer.from(tokenParts[1], 'base64'));
 };
 

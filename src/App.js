@@ -1,6 +1,7 @@
 import './styles/FontStyles.scss';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './styles/App.scss'
 import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import BirdList from './components/BirdList';
 import Login from './components/Login';
@@ -11,13 +12,24 @@ import UserProfile from './components/UserProfile';
 import AdminControls from './components/AdminControls';
 import NewBird from './components/NewBird';
 import PageTitle from './components/common/PageTitle';
+import './styles/ViewSingleSightingModal.scss';
+import ViewSingleSightingModal from './components/ViewSingleSightingModal';
 
 window.Buffer = window.Buffer || require('buffer').Buffer;
 
 function App() {
+  const [isSightingModalOpen, setIsSightingModalOpen] = useState(false);
+  const [sightingIdForModal, setSightingIdForModal] = useState(null);
+
   return (
     <div id='app'>
       <Router>
+        {isSightingModalOpen && (
+          <ViewSingleSightingModal
+            sightingId={sightingIdForModal}
+            setIsModalOpen={setIsSightingModalOpen}
+          />
+        )}
         <Navbar />
         <Routes>
           <Route path='/' element={<div>Home</div>} />
@@ -49,7 +61,12 @@ function App() {
             path='/birds/:pk'
             element={
               <PageTitle
-                content={<BirdDetails />}
+                content={
+                  <BirdDetails
+                    setIsSightingModalOpen={setIsSightingModalOpen}
+                    setSightingIdForModal={setSightingIdForModal}
+                  />
+                }
               ></PageTitle>
             }
           />

@@ -10,7 +10,10 @@ import { API } from '../lib/api';
 
 import UserSightingPhoto from './common/UserSightingPhoto';
 
-export default function BirdDetails({ setBirdName }) {
+export default function BirdDetails({
+  setSightingIdForModal,
+  setIsSightingModalOpen
+}) {
   const { pk } = useParams();
   const [birdData, setBirdData] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
@@ -32,10 +35,15 @@ export default function BirdDetails({ setBirdName }) {
     API.GET(API.ENDPOINTS.singleBird(pk))
       .then(({ data }) => {
         setBirdData(data);
-        setBirdName(data.name);
       })
       .catch((err) => console.error(err));
+    // eslint-disable-next-line
   }, [pk]);
+
+  const handleOpenSightingModal = (event) => {
+    setSightingIdForModal(event.target.value);
+    setIsSightingModalOpen(true);
+  };
 
   return (
     <>
@@ -90,7 +98,6 @@ export default function BirdDetails({ setBirdName }) {
                         {sighting.owner.username}
                       </Link>
                     </p>
-
                     <p>at {sighting.sighted_at_datetime}.</p>
                     <UserSightingPhoto
                       className='UserSightingPhoto'
@@ -99,7 +106,9 @@ export default function BirdDetails({ setBirdName }) {
                       imageHeight={180}
                     />
                   </div>
-                  <Link>View sighting details</Link>
+                  <button value={sighting.id} onClick={handleOpenSightingModal}>
+                    View sighting details
+                  </button>
                 </Popup>
               </Marker>
             ))}

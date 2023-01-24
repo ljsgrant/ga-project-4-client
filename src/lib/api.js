@@ -9,6 +9,7 @@ const ENDPOINTS = {
   login: '/api/user/login/',
   singleUser: (pk) => `/api/user/${pk}/`,
   sightings: '/api/sightings/',
+  singleSighting: (pk) => `/api/sightings/${pk}`,
   cloudinary: `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`
 };
 
