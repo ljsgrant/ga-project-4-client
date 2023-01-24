@@ -1,5 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 import '../styles/NewSighting.scss';
+import '../styles/EditSighting.scss';
 import '../styles/common/containerStyles.scss';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -36,6 +37,7 @@ export default function EditSighting() {
   const [selectedBird, setSelectedBird] = useState('');
   const [fileToUpload, setFileToUpload] = useState('');
   const [isDateTimeInputDisabled, setIsDateTimeInputDisabled] = useState(false);
+  const [isEditingPhoto, setIsEditingPhoto] = useState(false);
 
   useEffect(() => {
     API.GET(API.ENDPOINTS.singleSighting(id))
@@ -107,7 +109,7 @@ export default function EditSighting() {
     } else {
       setFormFields({
         ...formFields,
-        sighted_at_datetime: null
+        sighted_at_datetime: ''
       });
     }
   };
@@ -115,34 +117,44 @@ export default function EditSighting() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const imageData = new FormData();
-    imageData.append('file', fileToUpload);
-    imageData.append(
-      'upload_preset',
-      process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET
-    );
-    try {
-      const cloudinaryResponse = await API.POST(
-        API.ENDPOINTS.cloudinary,
-        imageData
+    if (fileToUpload) {
+      const imageData = new FormData();
+      imageData.append('file', fileToUpload);
+      imageData.append(
+        'upload_preset',
+        process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET
       );
-      console.log(cloudinaryResponse.data);
-      const imageId = cloudinaryResponse.data.public_id;
-      const requestBody = {
-        ...formFields,
-        image: imageId
-      };
-      console.log(requestBody);
+      try {
+        const cloudinaryResponse = await API.POST(
+          API.ENDPOINTS.cloudinary,
+          imageData
+        );
+        console.log(cloudinaryResponse.data);
+        const imageId = cloudinaryResponse.data.public_id;
+        const requestBody = {
+          ...formFields,
+          image: imageId
+        };
 
-      API.POST(API.ENDPOINTS.sightings, requestBody, API.getHeaders())
+        API.PUT(API.ENDPOINTS.singleSighting(id), requestBody, API.getHeaders())
+          .then(({ data }) => {
+            console.log(data);
+            console.log('edited sighting!');
+            navigate(`/birds/${formFields.bird_sighted}`);
+          })
+          .catch((error) => console.error(error));
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      console.log(formFields);
+      API.PUT(API.ENDPOINTS.singleSighting(id), formFields, API.getHeaders())
         .then(({ data }) => {
           console.log(data);
-          console.log('created sighting!');
+          console.log('edited sighting!');
           navigate(`/birds/${formFields.bird_sighted}`);
         })
         .catch((error) => console.error(error));
-    } catch (error) {
-      console.error(error);
     }
   };
 
@@ -176,9 +188,9 @@ export default function EditSighting() {
     handleTextChange(event);
   };
 
-  useEffect(() => {
-    console.log(formFields);
-  }, [formFields]);
+  const handleEditingPhotoToggle = () => {
+    setIsEditingPhoto(!isEditingPhoto);
+  };
 
   if (isLoggedIn) {
     return (
@@ -249,17 +261,33 @@ export default function EditSighting() {
               </div>
               <div className='photo-upload-container container-style-all container-style-column'>
                 <div>
-                  <label htmlFor='sighting-photo-upload'>
-                    <h3>Photo</h3>
-                  </label>
-                  <input
-                    type='file'
-                    id='sighting-photo-upload'
-                    name='sighting-photo-upload'
-                    accept='image/png, image/jpeg, image/tiff'
-                    onChange={handleFileChange}
-                    ref={fileInputRef}
-                  ></input>
+                  {isEditingPhoto ? (
+                    <>
+                      {' '}
+                      <label htmlFor='sighting-photo-upload'>
+                        Photo Upload
+                      </label>
+                      <input
+                        type='file'
+                        id='sighting-photo-upload'
+                        name='sighting-photo-upload'
+                        accept='image/png, image/jpeg, image/tiff'
+                        onChange={handleFileChange}
+                        ref={fileInputRef}
+                      ></input>
+                    </>
+                  ) : (
+                    <>
+                      <div className='old-photo'>
+                        <UserSightingPhoto
+                          cloudinaryImageId={initialSightingData?.image}
+                        />
+                      </div>
+                      <button type='button' onClick={handleEditingPhotoToggle}>
+                        Change photo
+                      </button>
+                    </>
+                  )}
                 </div>
                 {fileToUpload && (
                   <div>

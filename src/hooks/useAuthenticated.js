@@ -23,9 +23,5 @@ export const useAuthenticated = () => {
     }
   }, [isLoggedIn, pathname]);
 
-  useEffect(() => {
-    console.log(isAdmin);
-  }, [isAdmin]);
-
   return [isLoggedIn, setIsLoggedIn, isAdmin];
 };
