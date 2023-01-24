@@ -1,6 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 import '../styles/NewSighting.scss';
-import '../styles/common/container.scss'
+import '../styles/common/containerStyles.scss';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Marker, MapContainer, TileLayer } from 'react-leaflet';
@@ -163,21 +163,23 @@ export default function NewSighting() {
       <div className='NewSighting'>
         <div className='left-column'>
           <form className='sighting-form' onSubmit={handleSubmit}>
-            <label htmlFor='select-bird'>Bird</label>
-            <select
-              id='select-bird'
-              value={selectedBird}
-              onChange={handleSelect}
-              name='bird_sighted'
-            >
-              {allBirds?.map((bird) => (
-                <option key={bird.id} value={bird.id}>
-                  {bird.name}
-                </option>
-              ))}
-            </select>
-            <label htmlFor='sighted-at-datetime'>Date & time seen:</label>
-            <div className='datetime-wrapper'>
+            <div className='container-style-all container-style-top'>
+              <label htmlFor='select-bird'>Bird</label>
+              <select
+                id='select-bird'
+                value={selectedBird}
+                onChange={handleSelect}
+                name='bird_sighted'
+              >
+                {allBirds?.map((bird) => (
+                  <option key={bird.id} value={bird.id}>
+                    {bird.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className='datetime-wrapper container-style-all'>
+              <label htmlFor='sighted-at-datetime'>Date & time seen:</label>
               {isDateTimeInputDisabled ? (
                 <p>
                   {formFields.sighted_at_datetime &&
@@ -200,7 +202,7 @@ export default function NewSighting() {
                 />
               )}
             </div>
-            <div className='lat-long-inputs'>
+            <div className='lat-long-inputs container-style-all container-style-mid'>
               <label htmlFor='lat'>Latitude:</label>
               <input
                 id='lat'
@@ -218,18 +220,22 @@ export default function NewSighting() {
                 required
               />
             </div>
-            <div className='photo-upload-container'>
-              <label htmlFor='sighting-photo-upload'>Upload a photo:</label>
-              <input
-                type='file'
-                id='sighting-photo-upload'
-                name='sighting-photo-upload'
-                accept='image/png, image/jpeg, image/tiff'
-                onChange={handleFileChange}
-                ref={fileInputRef}
-              ></input>
+            <div className='photo-upload-container container-style-all container-style-column'>
+              <div>
+                <label htmlFor='sighting-photo-upload'>
+                  <h3>Upload photo:</h3>
+                </label>
+                <input
+                  type='file'
+                  id='sighting-photo-upload'
+                  name='sighting-photo-upload'
+                  accept='image/png, image/jpeg, image/tiff'
+                  onChange={handleFileChange}
+                  ref={fileInputRef}
+                ></input>
+              </div>
               {fileToUpload && (
-                <>
+                <div>
                   <label htmlFor='datetime-metadata-checkbox'>
                     Use JPEG metadata for sighting timestamp?
                   </label>
@@ -239,23 +245,31 @@ export default function NewSighting() {
                     name='datetime-metadata-checkbox'
                     onChange={handleDateTimeCheckbox}
                   />
-                </>
+                </div>
               )}
               <p>
+                (
                 <em>
                   This isn't required, but we encourage it as proof of the
                   sighting - and it's nicer for other users to look at!
                 </em>
+                )
               </p>
             </div>
-            <label htmlFor='notes'>Notes</label>
-            <textarea
-              id='notes'
-              name='notes'
-              onChange={handleTextChange}
-              required
-            />
-            <button type='submit'>Post this sighting</button>
+            <div className='container-style-all container-style-column'>
+              <label htmlFor='notes'>
+                <h3>Notes</h3>
+              </label>
+              <textarea
+                id='notes'
+                name='notes'
+                onChange={handleTextChange}
+                required
+              />
+            </div>
+            <div className='container-style-all container-style-bot'>
+              <button type='submit'>Post this sighting</button>
+            </div>
           </form>
         </div>
         <div className='right-column'>

@@ -7,9 +7,9 @@ export default function BirdListCard({ bird, setSingleBirdData }) {
     setSingleBirdData(bird)
   };
 
-  const handleMouseLeave = () => {
-    setSingleBirdData(null)
-  }
+  // const handleMouseLeave = () => {
+  //   setSingleBirdData(null)
+  // }
   return (
     <div className='BirdListCard' onMouseEnter={handleMouseEnter}>
       <Link className='Link' key={bird.id} to={`/birds/${bird.id}`}>

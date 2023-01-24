@@ -1,18 +1,22 @@
 @import '../variables';
 
-.container-style-top {
-  padding: 20px;
+.container-style-all {
+  padding: 10px 20px 20px 20px;
   box-sizing: border-box;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   background-color: $theme-color-container;
   width: 95%;
   margin-bottom: 5px;
+}
+.container-style-top {
   border-radius: 10px 10px 0px 0px;
 }
-.container-style-mid {
+.container-style-column {
+  flex-direction: column;
 }
 .container-style-bot {
+  border-radius: 0px 0px 10px 10px;
 }

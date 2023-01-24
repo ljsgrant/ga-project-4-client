@@ -8,6 +8,9 @@
     padding: 0;
     margin: 0;
   }
+  h3 {
+    text-align: center;
+  }
   .left-column {
     width: 40vw;
     display: flex;
@@ -19,10 +22,20 @@
       width: 100%;
       display: flex;
       flex-direction: column;
+      #sighting-photo-upload {
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
       textarea {
         min-height: 250px;
+        max-height: 250px;
+        min-width: 100%;
+        max-width: 100%;
+        border: none;
       }
-      .datetime-wrapper{
+      .datetime-wrapper {
         display: flex;
       }
     }
