@@ -99,16 +99,19 @@ export default function BirdDetails({
                       </Link>
                     </p>
                     <p>at {sighting.sighted_at_datetime}.</p>
-                    <UserSightingPhoto
-                      className='UserSightingPhoto'
-                      cloudinaryImageId={sighting.image}
-                      imageWidth={180}
-                      imageHeight={180}
-                    />
+                    <div className='photo-container'>
+                      <UserSightingPhoto
+                        className='UserSightingPhoto'
+                        cloudinaryImageId={sighting.image}
+                      />
+                    </div>
+                    <button
+                      value={sighting.id}
+                      onClick={handleOpenSightingModal}
+                    >
+                      View Details & Notes
+                    </button>
                   </div>
-                  <button value={sighting.id} onClick={handleOpenSightingModal}>
-                    View sighting details
-                  </button>
                 </Popup>
               </Marker>
             ))}

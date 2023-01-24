@@ -1,8 +1,8 @@
 import 'leaflet/dist/leaflet.css';
-import '../styles/NewSighting.scss';
+import '../../styles/NewSighting.scss';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { API } from '../lib/api';
+import { API } from '../../lib/api';
 
 export default function NewBird() {
   const navigate = useNavigate();

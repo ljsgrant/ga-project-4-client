@@ -2,22 +2,24 @@
 
 $BirdList-height: calc(99vh - $navbar-height - $page-title-height);
 $content-container-height: calc($BirdList-height - 150px);
+$title-container-height: 70px;
+
 
 .BirdList {
   height: $BirdList-height;
   background-color: white;
   padding-left: 10px;
   box-sizing: border-box;
-  // border: 5px solid blue;
   display: flex;
   h2,
-  h3 {
+  h3,
+  p {
     margin: 0;
   }
 }
 .left-column {
   .title-container {
-    height: 70px;
+    height: $title-container-height;
     width: 50vw;
     display: flex;
     justify-content: center;
@@ -58,7 +60,7 @@ $content-container-height: calc($BirdList-height - 150px);
   width: 50vw;
   flex-direction: column;
   justify-content: flex-start;
-  padding-top: 5%;
+  padding-top: $title-container-height;
   align-items: center;
   .bird-name-container {
     height: 60px;
@@ -68,39 +70,57 @@ $content-container-height: calc($BirdList-height - 150px);
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: $theme-color-container;
+    width: 95%;
+    margin-bottom: 5px;
+    border-radius: 10px 10px 0px 0px;
   }
   .image-container {
     height: 60%;
     width: 95%;
     background-color: $theme-color-darker;
-    // border-radius: 10px;
     display: flex;
     justify-content: center;
     .bird-image {
       max-height: 100%;
       background-color: $theme-color-darker;
-      border-radius: 10px;
+
       object-fit: cover;
     }
   }
+  .info-container {
+    background-color: $theme-color-container;
+    width: 95%;
+    margin-top: 5px;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+  }
   .view-sightings-link {
     position: absolute;
-    top: 22%;
-    left: 90%;
-    width: 150px;
+    top: 24.25%;
+    left: 87%;
+    width: 180px;
     height: 100px;
     font-size: 120%;
     font-weight: bolder;
-    border-radius: 10px;
+    border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    border: none;
+    border: 5px solid white;
     background-color: $theme-color-main;
     color: white;
     box-sizing: border-box;
-    padding: 20px;
+    text-decoration: none;
+    .sightings-link-text {
+      text-align: center;
+    }
+    .sightings-link-icon {
+      margin: 15px;
+      font-size: 120%;
+    }
     &:hover {
       background-color: $theme-color-main_button-hover;
       color: black;

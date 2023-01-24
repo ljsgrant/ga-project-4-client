@@ -1,3 +1,5 @@
+@import './variables';
+
 body {
   .ViewSingleSightingModal {
     background-color: rgba(0, 0, 0, 0.299);
@@ -8,19 +10,40 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    h2,
+    p {
+      margin: 0;
+    }
     .modal-container {
       width: 50vw;
-      max-height: 80vh;
+      height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
       position: absolute;
       background-color: white;
       border-radius: 10px;
-      .image-container{
-        max-height: 200px;
-        width: auto;
-        background-color: black;
-        .sighting-image{
-          max-height: 100px;
-          width: auto;
+      // border: 2px solid green;
+      .modal-header {
+        // border: 2px solid palevioletred;
+        width: 100%;
+        flex-basis: 20%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .modal-content {
+        width: 100%;
+        height: 80%;
+        // border: 2px solid blue;
+        box-sizing: border-box;
+        .image-container {
+          width: 100%;
+          height: 60%;
+          display: flex;
+          justify-content: center;
+          background-color: $theme-color-darker;
         }
       }
     }

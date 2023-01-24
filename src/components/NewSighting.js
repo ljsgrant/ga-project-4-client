@@ -1,5 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 import '../styles/NewSighting.scss';
+import '../styles/common/container.scss'
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Marker, MapContainer, TileLayer } from 'react-leaflet';

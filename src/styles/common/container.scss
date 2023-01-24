@@ -1,0 +1,18 @@
+@import '../variables';
+
+.container-style-top {
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: $theme-color-container;
+  width: 95%;
+  margin-bottom: 5px;
+  border-radius: 10px 10px 0px 0px;
+}
+.container-style-mid {
+}
+.container-style-bot {
+}

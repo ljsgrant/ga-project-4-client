@@ -30,7 +30,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      background-color: rgba(170, 211, 223, 0.573);
+      background-color: $theme-color-container;
       border-radius: 10px 10px 0px 0px;
       width: 100%;
       padding: 5px 0px;
@@ -52,7 +52,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      background-color: rgba(170, 211, 223, 0.573);
+      background-color: $theme-color-container;
       border-radius: 0px 0px 10px 10px;
       width: 100%;
       padding: 15px 25px;
@@ -90,5 +90,28 @@
   .map-popup-content {
     display: flex;
     flex-direction: column;
+    .photo-container {
+      height: 150px;
+      width: 100%;
+      // border: 5px solid pink;
+      margin: 10px 0px;
+    }
+    button {
+      width: 100%;
+      border-radius: 3px;
+      border: none;
+      font-size: 110%;
+      padding: 0px 5px;
+      background-color: $theme-color-main;
+      cursor: pointer;
+      &:hover {
+        background-color: rgb(0, 129, 123);
+        color: white;
+      }
+    }
+    p {
+      text-align: center;
+      margin: 0;
+    }
   }
 }
