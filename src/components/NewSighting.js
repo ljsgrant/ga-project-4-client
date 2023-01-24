@@ -149,6 +149,10 @@ export default function NewSighting() {
     handleTextChange(event);
   };
 
+  useEffect(() => {
+    console.log(formFields);
+  }, [formFields]);
+
   if (isLoggedIn) {
     return (
       <>

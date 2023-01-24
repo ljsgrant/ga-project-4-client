@@ -6,8 +6,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAuthenticated } from '../hooks/useAuthenticated';
 import { Marker, MapContainer, TileLayer } from 'react-leaflet';
 import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
-import PageMessage from './common/PageMessage';
 import { API } from '../lib/api';
+import UserSightingPhoto from './common/UserSightingPhoto';
+import PageMessage from './common/PageMessage';
 import EXIF from 'exif-js';
 
 export default function EditSighting() {
@@ -25,8 +26,8 @@ export default function EditSighting() {
   const [initialSightingData, setInitialSightingData] = useState(null);
   const [allBirds, setAllBirds] = useState(null);
   const [formFields, setFormFields] = useState({
-    bird_sighted: null,
-    sighted_at_datetime: null,
+    bird_sighted: '',
+    sighted_at_datetime: '',
     location_lat: 0,
     location_long: 0,
     notes: '',
@@ -40,6 +41,21 @@ export default function EditSighting() {
     API.GET(API.ENDPOINTS.singleSighting(id))
       .then(({ data }) => {
         setInitialSightingData(data);
+        setFormFields({
+          bird_sighted: data.bird_sighted.id,
+          sighted_at_datetime:
+            data.sighted_at_datetime.length > 16
+              ? data.sighted_at_datetime.slice(0, 16)
+              : data.sighted_at_datetime,
+          location_lat: data.location_lat,
+          location_long: data.location_long,
+          notes: data.notes,
+          image: data.image
+        });
+        setMarkerPosition({
+          lat: data.location_lat,
+          lng: data.location_long
+        });
       })
       .catch((err) => console.error(err));
   }, [id]);
@@ -160,6 +176,10 @@ export default function EditSighting() {
     handleTextChange(event);
   };
 
+  useEffect(() => {
+    console.log(formFields);
+  }, [formFields]);
+
   if (isLoggedIn) {
     return (
       <>
@@ -170,7 +190,7 @@ export default function EditSighting() {
                 <label htmlFor='select-bird'>Bird</label>
                 <select
                   id='select-bird'
-                  value={selectedBird}
+                  value={formFields.bird_sighted && formFields.bird_sighted}
                   onChange={handleSelect}
                   name='bird_sighted'
                 >
@@ -199,6 +219,10 @@ export default function EditSighting() {
                     id='sighted-at-datetime'
                     name='sighted_at_datetime'
                     type='datetime-local'
+                    value={
+                      formFields.sighted_at_datetime &&
+                      formFields.sighted_at_datetime
+                    }
                     onChange={handleTextChange}
                     disabled={isDateTimeInputDisabled}
                     required
@@ -211,7 +235,7 @@ export default function EditSighting() {
                   id='lat'
                   name='lat'
                   onChange={handleLatLongTextChange}
-                  value={markerPosition.lat}
+                  value={formFields.location_lat && formFields.location_lat}
                   required
                 />
                 <label htmlFor='long'>Longitude:</label>
@@ -219,14 +243,14 @@ export default function EditSighting() {
                   id='long'
                   name='lng'
                   onChange={handleLatLongTextChange}
-                  value={markerPosition.lng}
+                  value={formFields.location_long && formFields.location_long}
                   required
                 />
               </div>
               <div className='photo-upload-container container-style-all container-style-column'>
                 <div>
                   <label htmlFor='sighting-photo-upload'>
-                    <h3>Upload photo:</h3>
+                    <h3>Photo</h3>
                   </label>
                   <input
                     type='file'
@@ -250,14 +274,6 @@ export default function EditSighting() {
                     />
                   </div>
                 )}
-                <p>
-                  (
-                  <em>
-                    This isn't required, but we encourage it as proof of the
-                    sighting - and it's nicer for other users to look at!
-                  </em>
-                  )
-                </p>
               </div>
               <div className='container-style-all container-style-column'>
                 <label htmlFor='notes'>
@@ -267,11 +283,12 @@ export default function EditSighting() {
                   id='notes'
                   name='notes'
                   onChange={handleTextChange}
+                  value={formFields.notes && formFields.notes}
                   required
                 />
               </div>
               <div className='container-style-all container-style-bot'>
-                <button type='submit'>Post this sighting</button>
+                <button type='submit'>Update Sighting</button>
               </div>
             </form>
           </div>
