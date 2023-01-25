@@ -52,7 +52,7 @@ export default function BirdDetails({
   }, [pk, isBirdDataUpdated]);
 
   const handleTimeDateFilterChange = (event) => {
-    setFilters({ ...filters, [event.target.name]: true });
+    setFilters({ ...filters, [event.target.name]: event.target.value });
   };
   const handleMySightingFilterChange = (event) => {
     setFilters({ ...filters, byMySightings: event.target.checked });
@@ -117,9 +117,17 @@ export default function BirdDetails({
               onChange={handleMySightingFilterChange}
             />
             <p>Sightings from:</p>
-            <input type='date' />
+            <input
+              name='dateFrom'
+              onChange={handleTimeDateFilterChange}
+              type='date'
+            />
             <p>until:</p>
-            <input type='date' />
+            <input
+              name='dateTo'
+              onChange={handleTimeDateFilterChange}
+              type='date'
+            />
           </div>
           <div className='map-filters'>
             <p>Sightings between:</p>
