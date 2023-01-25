@@ -1,6 +1,6 @@
 import '../styles/Login.scss';
 import '../styles/common/containerStyles.scss';
-import '../styles/common/buttonStyles.scss'
+import '../styles/common/buttonStyles.scss';
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { API } from '../lib/api';
@@ -38,9 +38,9 @@ export default function Login() {
   return (
     <div className='Login'>
       <form className='login-form' onSubmit={handleSubmit}>
-        <h3 className='container-style-all container-style-top'>
-          Enter your details
-        </h3>
+        <div className='container-style-all container-style-top'>
+          <h3>Enter your details</h3>
+        </div>
         <div className='container-style-all container-style-column'>
           <label htmlFor='email'>Email</label>
           <input
@@ -50,8 +50,6 @@ export default function Login() {
             onChange={handleChange}
             required
           />
-        </div>
-        <div className='container-style-all container-style-column'>
           <label htmlFor='password'>Password</label>
           <input
             id='password'

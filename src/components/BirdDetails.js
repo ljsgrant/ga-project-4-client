@@ -76,7 +76,7 @@ export default function BirdDetails({
           </div>
         </div>
         <div className='right-column'>
-          <div className='map-header'>
+          <div className='map-header '>
             <h3>User sightings of the {birdData?.name}</h3>
           </div>
           <MapContainer

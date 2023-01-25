@@ -38,11 +38,7 @@ function App() {
           <Route path='/' element={<div>Home</div>} />
           <Route
             path='/admin'
-            element={
-              <PageTitle
-                content={<AdminControls />}
-              ></PageTitle>
-            }
+            element={<PageTitle content={<AdminControls />}></PageTitle>}
           />
           <Route path='/admin/new-bird' element={<NewBird />} />
           <Route
@@ -51,7 +47,15 @@ function App() {
               <PageTitle titleText={'Log In'} content={<Login />}></PageTitle>
             }
           />
-          <Route path='/register' element={<Register />} />
+          <Route
+            path='/register'
+            element={
+              <PageTitle
+                titleText={'Register'}
+                content={<Register />}
+              ></PageTitle>
+            }
+          />
           <Route path='/user/:pk' element={<UserProfile />} />
           <Route
             path='/birds'
