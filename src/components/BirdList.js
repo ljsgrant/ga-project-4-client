@@ -65,10 +65,14 @@ export default function BirdList() {
       <div className='right-column'>
         <div className='bird-name-container'>
           <div className='bird-names'>
-            <h2>{singleBirdData?.name}</h2>
-            <h3>
-              (<em>{singleBirdData?.scientific_name}</em>)
-            </h3>
+            {singleBirdData && (
+              <>
+                <h2>{singleBirdData?.name}</h2>
+                <h3>
+                  (<em>{singleBirdData?.scientific_name}</em>)
+                </h3>
+              </>
+            )}
           </div>
 
           {singleBirdData && (
