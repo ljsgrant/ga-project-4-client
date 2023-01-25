@@ -15,8 +15,13 @@ export default function Landing() {
               <p>Hi there, {AUTH.getPayload().username}!</p>
               <p className='subheader'>Want to get started?</p>
               <p className='actions'>
-                <Link className='Link'>Record a sighting</Link> or{' '}
-                <Link className='Link'>Browse all birds</Link>
+                <Link to='/add-new-sighting' className='Link'>
+                  Record a sighting
+                </Link>{' '}
+                or{' '}
+                <Link to='/birds' className='Link'>
+                  Browse all birds
+                </Link>
               </p>
             </>
           ) : (
@@ -27,7 +32,10 @@ export default function Landing() {
                 Record bird sightings and see distribution
               </p>
               <p className='actions'>
-                Don't have an account yet? <Link className='Link'>Sign Up</Link>
+                Don't have an account yet?{' '}
+                <Link to='/register' className='Link'>
+                  Sign Up
+                </Link>
               </p>
             </>
           )}

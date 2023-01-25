@@ -36,7 +36,7 @@ export default function Navbar() {
             {isLoggedIn && (
               <li>
                 <Link className='nav-link' to='/add-new-sighting'>
-                  Post New Sighting
+                  Record Sighting
                 </Link>
               </li>
             )}
