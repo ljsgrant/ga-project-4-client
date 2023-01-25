@@ -1,3 +1,5 @@
+import '../../styles/common/buttonStyles.scss';
+import '../../styles/MapPopup.scss';
 import { Link } from 'react-router-dom';
 import { Popup } from 'react-leaflet';
 import UserSightingPhoto from './UserSightingPhoto';
@@ -38,15 +40,27 @@ export default function MapPopup({
             .join('/')}
           .
         </p>
-        <div className='photo-container'>
-          <UserSightingPhoto
-            className='UserSightingPhoto'
-            cloudinaryImageId={sightingData?.image}
-          />
+        {sightingData?.image === '0' || !sightingData?.image ? (
+          <div className='no-photo-container'>
+            <p>No photo for this sighting.</p>
+          </div>
+        ) : (
+          <div className='photo-container'>
+            <UserSightingPhoto
+              className='UserSightingPhoto'
+              cloudinaryImageId={sightingData?.image}
+            />
+          </div>
+        )}
+        <div className='button-wrapper'>
+          <button
+            className='button-style-2'
+            value={sightingData?.id}
+            onClick={handleOpenSightingModal}
+          >
+            View Details
+          </button>
         </div>
-        <button value={sightingData?.id} onClick={handleOpenSightingModal}>
-          View Details & Notes
-        </button>
       </div>
     </Popup>
   );

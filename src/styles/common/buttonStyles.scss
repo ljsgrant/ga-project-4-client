@@ -13,3 +13,16 @@
     color: white;
   }
 }
+.button-style-2 {
+  width: 100%;
+  border-radius: 10px;
+  border: none;
+  font-size: 110%;
+  padding: 15px;
+  background-color: $theme-color-main;
+  &:hover {
+    cursor: pointer;
+    background-color: rgb(0, 129, 123);
+    color: white;
+  }
+}

@@ -57,7 +57,15 @@ function App() {
               ></PageTitle>
             }
           />
-          <Route path='/user/:pk' element={<UserProfile />} />
+          <Route
+            path='/user/:pk'
+            element={
+              <UserProfile
+                setSightingIdForModal={setSightingIdForModal}
+                setIsSightingModalOpen={setIsSightingModalOpen}
+              />
+            }
+          />
           <Route
             path='/birds'
             element={

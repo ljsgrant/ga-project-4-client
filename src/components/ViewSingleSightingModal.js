@@ -85,113 +85,117 @@ export default function ViewSingleSightingModal({
     setIsMapOpen(true);
   };
 
-  if (!sightingData) {
-    return <p>Loading data...</p>;
-  }
-
   return (
     <>
       <div className='ViewSingleSightingModal'>
         <div className='modal-container'>
-          <div className='modal-header'>
-            <button
-              aria-label='close sighting'
-              id='close-sighting-button'
-              onClick={handleClose}
-            >
-              X
-            </button>
-            <h3>Sighting Details</h3>
-            <h2>{sightingData?.bird_sighted.name}</h2>
-            <p>
-              Sighting recorded by{' '}
-              <Link
-                to={`/user/${sightingData?.owner.id}`}
-                onClick={handleClose}
-              >
-                {sightingData?.owner.username}
-              </Link>{' '}
-              at {sightingData?.sighted_at_datetime.split('T')[1].substr(0, 5)}{' '}
-              on{' '}
-              {sightingData?.sighted_at_datetime
-                .split('T')[0]
-                .substr(0, 10)
-                .split('-')
-                .reverse()
-                .join('/')}
-            </p>
-          </div>
-          <div className='modal-controls'></div>
-          <div className='modal-content'>
-            <div className='content-controls'>
-              <div className='left'>
-                <button ref={photoButtonRef} onClick={showPhoto}>
-                  Photo
-                </button>
+          {sightingData && (
+            <>
+              <div className='modal-header'>
                 <button
-                  ref={mapButtonRef}
-                  className='unclicked-tab'
-                  onClick={showMap}
+                  aria-label='close sighting'
+                  id='close-sighting-button'
+                  onClick={handleClose}
                 >
-                  Map
+                  X
                 </button>
-              </div>
-              <div className='right'>
-                {' '}
-                {AUTH.getPayload().sub === sightingData?.owner.id && (
-                  <Link to={`/edit-sighting/${sightingData?.id}`}>
-                    <button onClick={handleClose}>Edit Sighting</button>
+                <h3>Sighting Details</h3>
+                <h2>{sightingData?.bird_sighted.name}</h2>
+                <p>
+                  Sighting recorded by{' '}
+                  <Link
+                    to={`/user/${sightingData?.owner.id}`}
+                    onClick={handleClose}
+                  >
+                    {sightingData?.owner.username}
                   </Link>
-                )}
-                {(AUTH.getPayload().sub === sightingData?.owner.id ||
-                  AUTH.getPayload().isAdmin) && (
-                  <button onClick={handleDeleteAlertOpen}>
-                    Delete Sighting
-                  </button>
-                )}
+                  {'. '}
+                  Seen at{' '}
+                  {sightingData?.sighted_at_datetime
+                    .split('T')[1]
+                    .substr(0, 5)}{' '}
+                  on{' '}
+                  {sightingData?.sighted_at_datetime
+                    .split('T')[0]
+                    .substr(0, 10)
+                    .split('-')
+                    .reverse()
+                    .join('/')}
+                </p>
               </div>
-            </div>
-            <div className='image-container'>
-              {isPhotoOpen &&
-                (sightingData?.image === '0' ? (
-                  <p>(No photo was added for this sighting)</p>
-                ) : (
-                  <UserSightingPhoto
-                    className='photo-component'
-                    cloudinaryImageId={sightingData?.image}
-                  />
-                ))}
+              <div className='modal-controls'></div>
+              <div className='modal-content'>
+                <div className='content-controls'>
+                  <div className='left'>
+                    <button ref={photoButtonRef} onClick={showPhoto}>
+                      Photo
+                    </button>
+                    <button
+                      ref={mapButtonRef}
+                      className='unclicked-tab'
+                      onClick={showMap}
+                    >
+                      Map
+                    </button>
+                  </div>
+                  <div className='right'>
+                    {' '}
+                    {AUTH.getPayload().sub === sightingData?.owner.id && (
+                      <Link to={`/edit-sighting/${sightingData?.id}`}>
+                        <button onClick={handleClose}>Edit Sighting</button>
+                      </Link>
+                    )}
+                    {(AUTH.getPayload().sub === sightingData?.owner.id ||
+                      AUTH.getPayload().isAdmin) && (
+                      <button onClick={handleDeleteAlertOpen}>
+                        Delete Sighting
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <div className='image-container'>
+                  {isPhotoOpen &&
+                    (sightingData?.image === '0' ? (
+                      <p>(No photo was added for this sighting)</p>
+                    ) : (
+                      <UserSightingPhoto
+                        className='photo-component'
+                        cloudinaryImageId={sightingData?.image}
+                      />
+                    ))}
 
-              {isMapOpen && (
-                <MapContainer
-                  center={[
-                    sightingData?.location_lat,
-                    sightingData?.location_long
-                  ]}
-                  zoom={5}
-                  scrollWheelZoom={false}
-                  dragging={false}
-                >
-                  <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-                  />
+                  {isMapOpen && (
+                    <MapContainer
+                      center={[
+                        sightingData?.location_lat,
+                        sightingData?.location_long
+                      ]}
+                      zoom={5}
+                      scrollWheelZoom={false}
+                      dragging={false}
+                    >
+                      <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                      />
 
-                  <Marker
-                    icon={DefaultMarkerIcon}
-                    position={[
-                      sightingData?.location_lat,
-                      sightingData?.location_long
-                    ]}
-                  ></Marker>
-                </MapContainer>
-              )}
-            </div>
-            <div className='info-container'>
-              <h3>Sighting Notes</h3>
-              <p>{sightingData?.notes}</p>
-            </div>
-          </div>
+                      <Marker
+                        icon={DefaultMarkerIcon}
+                        position={[
+                          sightingData?.location_lat,
+                          sightingData?.location_long
+                        ]}
+                      ></Marker>
+                    </MapContainer>
+                  )}
+                </div>
+                <div className='info-container'>
+                  <h3>Sighting Notes</h3>
+                  <p>{sightingData?.notes}</p>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
       <Dialog

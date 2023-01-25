@@ -7,8 +7,12 @@ import { useParams, Link } from 'react-router-dom';
 import { API } from '../lib/api';
 import { AUTH } from '../lib/auth';
 import UserSightingPhoto from './common/UserSightingPhoto';
+import MapPopup from './common/MapPopup';
 
-export default function UserProfile() {
+export default function UserProfile({
+  setSightingIdForModal,
+  setIsSightingModalOpen
+}) {
   const { pk } = useParams();
   const [userData, setUserData] = useState(null);
   console.log(AUTH.getPayload());
@@ -38,32 +42,11 @@ export default function UserProfile() {
               icon={DefaultMarkerIcon}
               position={[sighting.location_lat, sighting.location_long]}
             >
-              <Popup>
-                <div className='map-popup-content'>
-                  <Link to={`/birds/${sighting?.bird_sighted.id}`}>
-                    <h4>{sighting?.bird_sighted.name}</h4>
-                  </Link>
-                  <p>
-                    Seen at{' '}
-                    {sighting?.sighted_at_datetime.split('T')[1].substr(0, 5)}{' '}
-                    on{' '}
-                    {sighting?.sighted_at_datetime
-                      .split('T')[0]
-                      .substr(0, 10)
-                      .split('-')
-                      .reverse()
-                      .join('/')}
-                    .
-                  </p>
-                  <UserSightingPhoto
-                    className='UserSightingPhoto'
-                    cloudinaryImageId={sighting?.image}
-                    imageWidth={180}
-                    imageHeight={180}
-                  />
-                </div>
-                <Link>View sighting details</Link>
-              </Popup>
+              <MapPopup
+                sightingData={sighting}
+                setSightingIdForModal={setSightingIdForModal}
+                setIsSightingModalOpen={setIsSightingModalOpen}
+              />
             </Marker>
           ))}
           {userData?.sightings.length < 1 && (

@@ -3,10 +3,10 @@ import 'leaflet/dist/leaflet.css';
 import '../styles/common/containerStyles.scss';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { useState, useEffect, useMemo } from 'react';
+import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
-
-import { useParams } from 'react-router';
+import MapPopup from './common/MapPopup';
 import { API } from '../lib/api';
 
 import UserSightingPhoto from './common/UserSightingPhoto';
@@ -96,40 +96,11 @@ export default function BirdDetails({
                 icon={DefaultMarkerIcon}
                 position={[sighting.location_lat, sighting.location_long]}
               >
-                <Popup>
-                  <div className='map-popup-content'>
-                    <p>
-                      Seen by{' '}
-                      <Link to={`/user/${sighting.owner.id}`}>
-                        {sighting.owner.username}
-                      </Link>
-                    </p>
-                    <p>
-                      at{' '}
-                      {sighting?.sighted_at_datetime.split('T')[1].substr(0, 5)}{' '}
-                      on{' '}
-                      {sighting?.sighted_at_datetime
-                        .split('T')[0]
-                        .substr(0, 10)
-                        .split('-')
-                        .reverse()
-                        .join('/')}
-                      .
-                    </p>
-                    <div className='photo-container'>
-                      <UserSightingPhoto
-                        className='UserSightingPhoto'
-                        cloudinaryImageId={sighting.image}
-                      />
-                    </div>
-                    <button
-                      value={sighting.id}
-                      onClick={handleOpenSightingModal}
-                    >
-                      View Details & Notes
-                    </button>
-                  </div>
-                </Popup>
+                <MapPopup
+                  sightingData={sighting}
+                  setSightingIdForModal={setSightingIdForModal}
+                  setIsSightingModalOpen={setIsSightingModalOpen}
+                />
               </Marker>
             ))}
             {birdData?.sightings.length < 1 && (
