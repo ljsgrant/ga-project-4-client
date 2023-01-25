@@ -5,12 +5,13 @@ import { AUTH } from '../lib/auth';
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn, isAdmin] = useAuthenticated();
+  const [isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin] = useAuthenticated();
 
   const logout = () => {
     AUTH.deleteToken();
     console.log('logged out');
     setIsLoggedIn(false);
+    setIsAdmin(false);
     navigate('/');
   };
 

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import UserSightingPhoto from './common/UserSightingPhoto';
 import { API } from '../lib/api';
 import { AUTH } from '../lib/auth';
+import { useAuthenticated } from '../hooks/useAuthenticated';
 
 export default function ViewSingleSightingModal({
   setIsModalOpen,
@@ -42,7 +43,9 @@ export default function ViewSingleSightingModal({
                 <button onClick={handleClose}>Edit Sighting</button>
               </Link>
             )}
-            <button>Delete Sighting</button>
+
+            {(AUTH.getPayload().sub === sightingData?.owner.id ||
+              AUTH.getPayload().isAdmin) && <button>Delete Sighting</button>}
           </div>
           <div className='modal-content'>
             <div className='image-container'>

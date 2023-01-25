@@ -13,7 +13,6 @@ export const useAuthenticated = () => {
   }, [pathname]);
 
   useEffect(() => {
-    setIsAdmin(false);
     if (isLoggedIn) {
       API.GET(API.ENDPOINTS.singleUser(AUTH.getPayload().sub))
         .then(({ data }) => {
@@ -23,5 +22,5 @@ export const useAuthenticated = () => {
     }
   }, [isLoggedIn, pathname]);
 
-  return [isLoggedIn, setIsLoggedIn, isAdmin];
+  return [isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin];
 };
