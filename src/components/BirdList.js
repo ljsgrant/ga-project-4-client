@@ -80,7 +80,7 @@ export default function BirdList() {
               className='view-sightings-link'
               to={`/birds/${singleBirdData?.id}`}
             >
-              <p className='sightings-link-text'>View Sightings</p>
+              <p className='sightings-link-text'>Sightings</p>
               <p className='sightings-link-icon'>&#8658;</p>
             </Link>
           )}

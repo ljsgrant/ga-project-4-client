@@ -1,6 +1,6 @@
 import '../styles/BirdDetails.scss';
 import 'leaflet/dist/leaflet.css';
-import '../styles/common/containerStyles.scss'
+import '../styles/common/containerStyles.scss';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
@@ -55,13 +55,15 @@ export default function BirdDetails({
         <div className='left-column'>
           <div className='title-container'>
             <h2>{birdData?.name}</h2>
-            <h3>
-              (
-              <span className='scientific-name'>
-                {birdData?.scientific_name}
-              </span>
-              )
-            </h3>
+            {birdData && (
+              <h3>
+                (
+                <span className='scientific-name'>
+                  {birdData?.scientific_name}
+                </span>
+                )
+              </h3>
+            )}
           </div>
           <div className='hero-image-container photo-container-style'>
             <img
