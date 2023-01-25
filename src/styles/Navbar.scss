@@ -13,13 +13,13 @@
   }
   .nav-left,
   .nav-right {
-    padding-left: 35px;
     display: flex;
     align-items: center;
     height: 100%;
   }
   .nav-left {
     flex-basis: 50%;
+    padding-left: 35px;
   }
   .nav-right {
     flex-basis: 20%;
@@ -33,7 +33,6 @@
     justify-content: center;
     margin: 0px;
     list-style: none;
-    margin-left: 20px;
     height: 100%;
     li {
       margin-right: 2px;
@@ -72,4 +71,3 @@
     }
   }
 }
-

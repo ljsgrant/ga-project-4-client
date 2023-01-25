@@ -40,7 +40,6 @@ function App() {
             path='/admin'
             element={
               <PageTitle
-                titleText={'Admin Controls'}
                 content={<AdminControls />}
               ></PageTitle>
             }

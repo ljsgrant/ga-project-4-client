@@ -1,7 +1,7 @@
 @import '../variables';
 
 .container-style-all {
-  padding: 10px 20px 20px 20px;
+  padding: 10px;
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -13,6 +13,8 @@
 }
 .container-style-top {
   border-radius: 10px 10px 0px 0px;
+  background-color: $theme-color-darker;
+  color: white;
 }
 .container-style-column {
   flex-direction: column;

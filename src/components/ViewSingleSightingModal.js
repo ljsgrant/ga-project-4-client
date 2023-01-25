@@ -1,7 +1,10 @@
 import '../styles/DeleteDialog.scss';
-import { useState, useEffect } from 'react';
+import 'leaflet/dist/leaflet.css';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import UserSightingPhoto from './common/UserSightingPhoto';
+import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
 import { API } from '../lib/api';
 import { AUTH } from '../lib/auth';
 import {
@@ -15,12 +18,15 @@ import {
 
 export default function ViewSingleSightingModal({
   setIsModalOpen,
-  sightingId, 
+  sightingId,
   setIsBirdDataUpdated
 }) {
   const [sightingData, setSightingData] = useState(null);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
-
+  const [isPhotoOpen, setIsPhotoOpen] = useState(true);
+  const [isMapOpen, setIsMapOpen] = useState(false);
+  const mapButtonRef = useRef(null);
+  const photoButtonRef = useRef(null);
 
   const handleClose = () => {
     setIsModalOpen(false);
@@ -62,45 +68,110 @@ export default function ViewSingleSightingModal({
     handleDeleteAlertClose();
   };
 
+  const showPhoto = () => {
+    const photoButton = photoButtonRef.current;
+    const mapButton = mapButtonRef.current;
+    photoButton.classList.remove('unclicked-tab');
+    mapButton.classList.add('unclicked-tab');
+    setIsPhotoOpen(true);
+    setIsMapOpen(false);
+  };
+  const showMap = () => {
+    const photoButton = photoButtonRef.current;
+    const mapButton = mapButtonRef.current;
+    photoButton.classList.add('unclicked-tab');
+    mapButton.classList.remove('unclicked-tab');
+    setIsPhotoOpen(false);
+    setIsMapOpen(true);
+  };
+
+  if (!sightingData) {
+    return <p>Loading data...</p>;
+  }
+
   return (
     <>
       <div className='ViewSingleSightingModal'>
         <div className='modal-container'>
           <div className='modal-header'>
-            <button aria-label='close sighting' onClick={handleClose}>
+            <button aria-label='close sighting' id='close-sighting-button' onClick={handleClose}>
               X
             </button>
-            <h2>Sighting Details</h2>
+            <h3>Sighting Details</h3>
             <h2>{sightingData?.bird_sighted.name}</h2>
-            <p>{sightingData?.sighted_at_datetime}</p>
-            <p>Sighting recorded by {sightingData?.owner.username}</p>
+            <p>
+              Sighting recorded by {sightingData?.owner.username} at{' '}
+              {sightingData?.sighted_at_datetime}
+            </p>
           </div>
-          <div className='modal-controls'>
-            {AUTH.getPayload().sub === sightingData?.owner.id && (
-              <Link to={`/edit-sighting/${sightingData?.id}`}>
-                <button onClick={handleClose}>Edit Sighting</button>
-              </Link>
-            )}
-
-            {(AUTH.getPayload().sub === sightingData?.owner.id ||
-              AUTH.getPayload().isAdmin) && (
-              <button onClick={handleDeleteAlertOpen}>Delete Sighting</button>
-            )}
-          </div>
+          <div className='modal-controls'></div>
           <div className='modal-content'>
+            <div className='content-controls'>
+              <div className='left'>
+                <button ref={photoButtonRef} onClick={showPhoto}>
+                  Photo
+                </button>
+                <button
+                  ref={mapButtonRef}
+                  className='unclicked-tab'
+                  onClick={showMap}
+                >
+                  Map
+                </button>
+              </div>
+              <div className='right'>
+                {' '}
+                {AUTH.getPayload().sub === sightingData?.owner.id && (
+                  <Link to={`/edit-sighting/${sightingData?.id}`}>
+                    <button onClick={handleClose}>Edit Sighting</button>
+                  </Link>
+                )}
+                {(AUTH.getPayload().sub === sightingData?.owner.id ||
+                  AUTH.getPayload().isAdmin) && (
+                  <button onClick={handleDeleteAlertOpen}>
+                    Delete Sighting
+                  </button>
+                )}
+              </div>
+            </div>
             <div className='image-container'>
-              {sightingData?.image === '0' ? (
-                <p>(No photo was added for this sighting)</p>
-              ) : (
-                <UserSightingPhoto
-                  className='photo-component'
-                  cloudinaryImageId={sightingData?.image}
-                />
+              {isPhotoOpen &&
+                (sightingData?.image === '0' ? (
+                  <p>(No photo was added for this sighting)</p>
+                ) : (
+                  <UserSightingPhoto
+                    className='photo-component'
+                    cloudinaryImageId={sightingData?.image}
+                  />
+                ))}
+
+              {isMapOpen && (
+                <MapContainer
+                  center={[
+                    sightingData?.location_lat,
+                    sightingData?.location_long
+                  ]}
+                  zoom={5}
+                  scrollWheelZoom={false}
+                  dragging={false}
+                >
+                  <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                  />
+
+                  <Marker
+                    icon={DefaultMarkerIcon}
+                    position={[
+                      sightingData?.location_lat,
+                      sightingData?.location_long
+                    ]}
+                  ></Marker>
+                </MapContainer>
               )}
             </div>
             <div className='info-container'>
-              <button>Notes</button>
-              <button>Map Marker</button>
+              <h3>Sighting Notes</h3>
               <p>{sightingData?.notes}</p>
             </div>
           </div>

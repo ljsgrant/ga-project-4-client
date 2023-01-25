@@ -1,4 +1,5 @@
 import '../styles/BirdList.scss';
+import '../styles/common/containerStyles.scss'
 import { API } from '../lib/api';
 import { useState, useEffect } from 'react';
 import BirdListCard from './BirdListCard';
@@ -28,6 +29,7 @@ export default function BirdList() {
       })
       .catch((err) => console.error(err));
   }, [searchTerm]);
+
 
   return (
     <div className='BirdList'>
@@ -63,10 +65,21 @@ export default function BirdList() {
       </div>
       <div className='right-column'>
         <div className='bird-name-container'>
-          <h2>{singleBirdData?.name}</h2>
-          <h3>
-            (<em>{singleBirdData?.scientific_name}</em>)
-          </h3>
+          <div className='bird-names'>
+            <h2>{singleBirdData?.name}</h2>
+            <h3>
+              (<em>{singleBirdData?.scientific_name}</em>)
+            </h3>
+          </div>
+
+            <Link
+              className='view-sightings-link'
+              to={`/birds/${singleBirdData?.id}`}
+            >
+              <p className='sightings-link-text'>View Sightings</p>
+              <p className='sightings-link-icon'>&#8658;</p>
+            </Link>
+
         </div>
         <div className='image-container'>
           {singleBirdData && (
@@ -80,15 +93,6 @@ export default function BirdList() {
 
         <div className='info-container'>
           <p>{singleBirdData?.description}</p>
-        </div>
-        <div>
-          <Link
-            className='view-sightings-link'
-            to={`/birds/${singleBirdData?.id}`}
-          >
-            <p className='sightings-link-text'>View Sightings</p>
-            <p className='sightings-link-icon'>&#8658;</p>
-          </Link>
         </div>
       </div>
     </div>
