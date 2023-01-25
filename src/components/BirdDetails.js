@@ -54,9 +54,11 @@ export default function BirdDetails({
   const handleTimeDateFilterChange = (event) => {
     setFilters({ ...filters, [event.target.name]: event.target.value });
   };
+
   const handleMySightingFilterChange = (event) => {
     setFilters({ ...filters, byMySightings: event.target.checked });
   };
+
   const handleApplyFilters = () => {
     API.POST(
       API.ENDPOINTS.filterBirdSightings,
@@ -73,8 +75,8 @@ export default function BirdDetails({
   const handleRemoveFilters = () => {};
 
   useEffect(() => {
-    console.log(filters);
-  }, [filters]);
+    console.log(birdData);
+  }, [birdData]);
 
   return (
     <>
@@ -131,9 +133,17 @@ export default function BirdDetails({
           </div>
           <div className='map-filters'>
             <p>Sightings between:</p>
-            <input type='time' />
+            <input
+              name='timeFrom'
+              onChange={handleTimeDateFilterChange}
+              type='time'
+            />
             <p>and:</p>
-            <input type='time' />
+            <input
+              name='timeTo'
+              onChange={handleTimeDateFilterChange}
+              type='time'
+            />
             <button onClick={handleApplyFilters}>Apply</button>
             <button>Clear All</button>
           </div>
