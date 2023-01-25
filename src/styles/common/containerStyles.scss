@@ -22,3 +22,10 @@
 .container-style-bot {
   border-radius: 0px 0px 10px 10px;
 }
+.photo-container-style {
+  height: 60%;
+  width: 95%;
+  background-color: $theme-color-darker;
+  display: flex;
+  justify-content: center;
+}

@@ -1,5 +1,7 @@
 @import './variables';
 
+$center-margin-half-width: 10px;
+
 .BirdDetails {
   display: flex;
   justify-content: center;
@@ -16,11 +18,12 @@
   }
   .left-column {
     max-width: 40vw;
+    padding-top: $title-container-height;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    margin-right: 20px;
+    margin-right: $center-margin-half-width;
 
     .scientific-name {
       font-style: italic;
@@ -42,7 +45,7 @@
       display: flex;
       justify-content: center;
       margin: 5px 0px;
-      padding: 5px 0px;
+
       .hero-image {
         height: 100%;
         width: auto;
@@ -61,7 +64,7 @@
   }
   .right-column {
     width: 40vw;
-    margin-left: 20px;
+    margin-left: $center-margin-half-width;
     .map-header {
       display: flex;
       flex-direction: column;

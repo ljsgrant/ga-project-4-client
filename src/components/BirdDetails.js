@@ -1,5 +1,6 @@
 import '../styles/BirdDetails.scss';
 import 'leaflet/dist/leaflet.css';
+import '../styles/common/containerStyles.scss'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
@@ -62,7 +63,7 @@ export default function BirdDetails({
               )
             </h3>
           </div>
-          <div className='hero-image-container'>
+          <div className='hero-image-container photo-container-style'>
             <img
               className='hero-image'
               src={birdData?.image}
