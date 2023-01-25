@@ -1,11 +1,8 @@
 import '../styles/Landing.scss';
 import { Link } from 'react-router-dom';
-import { useAuthenticated } from '../hooks/useAuthenticated';
 import { AUTH } from '../lib/auth';
 
 export default function Landing() {
-  const [isLoggedIn] = useAuthenticated();
-
   return (
     <div className='Landing'>
       <div className='background'>
