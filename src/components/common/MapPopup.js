@@ -28,17 +28,26 @@ export default function MapPopup({
             <h4>{sightingData?.bird_sighted.name}</h4>
           </Link>
         )}
-        <p>at {sightingData.sighted_at_datetime}.</p>
-        <UserSightingPhoto
-          className='UserSightingPhoto'
-          cloudinaryImageId={sightingData.image}
-          imageWidth={180}
-          imageHeight={180}
-        />
+        <p>
+          at {sightingData?.sighted_at_datetime.split('T')[1].substr(0, 5)} on{' '}
+          {sightingData?.sighted_at_datetime
+            .split('T')[0]
+            .substr(0, 10)
+            .split('-')
+            .reverse()
+            .join('/')}
+          .
+        </p>
+        <div className='photo-container'>
+          <UserSightingPhoto
+            className='UserSightingPhoto'
+            cloudinaryImageId={sightingData?.image}
+          />
+        </div>
+        <button value={sightingData?.id} onClick={handleOpenSightingModal}>
+          View Details & Notes
+        </button>
       </div>
-      <button value={sightingData.id} onClick={handleOpenSightingModal}>
-        View sighting details
-      </button>
     </Popup>
   );
 }
