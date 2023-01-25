@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { API } from '../lib/api';
-import UserSightingPhoto from './common/UserSightingPhoto';
 import { Link } from 'react-router-dom';
+import UserSightingPhoto from './common/UserSightingPhoto';
+import { API } from '../lib/api';
+import { AUTH } from '../lib/auth';
 
 export default function ViewSingleSightingModal({
   setIsModalOpen,
@@ -36,9 +37,11 @@ export default function ViewSingleSightingModal({
             <p>Sighting recorded by {sightingData?.owner.username}</p>
           </div>
           <div className='modal-controls'>
-            <Link to={`/edit-sighting/${sightingData?.id}`}>
-              <button onClick={handleClose}>Edit Sighting</button>
-            </Link>
+            {AUTH.getPayload().sub === sightingData?.owner.id && (
+              <Link to={`/edit-sighting/${sightingData?.id}`}>
+                <button onClick={handleClose}>Edit Sighting</button>
+              </Link>
+            )}
             <button>Delete Sighting</button>
           </div>
           <div className='modal-content'>

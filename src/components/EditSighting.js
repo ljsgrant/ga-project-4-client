@@ -42,6 +42,7 @@ export default function EditSighting() {
   useEffect(() => {
     API.GET(API.ENDPOINTS.singleSighting(id))
       .then(({ data }) => {
+        console.log(data)
         setInitialSightingData(data);
         setFormFields({
           bird_sighted: data.bird_sighted.id,
@@ -191,6 +192,10 @@ export default function EditSighting() {
   const handleEditingPhotoToggle = () => {
     setIsEditingPhoto(!isEditingPhoto);
   };
+
+  if(!initialSightingData){
+    return <p>Loading data...</p>
+  }
 
   if (isLoggedIn) {
     return (
