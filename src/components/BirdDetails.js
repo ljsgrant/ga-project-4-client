@@ -12,7 +12,9 @@ import UserSightingPhoto from './common/UserSightingPhoto';
 
 export default function BirdDetails({
   setSightingIdForModal,
-  setIsSightingModalOpen
+  setIsSightingModalOpen,
+  isBirdDataUpdated,
+  setIsBirdDataUpdated
 }) {
   const { pk } = useParams();
   const [birdData, setBirdData] = useState(null);
@@ -37,8 +39,9 @@ export default function BirdDetails({
         setBirdData(data);
       })
       .catch((err) => console.error(err));
+    setIsBirdDataUpdated(false);
     // eslint-disable-next-line
-  }, [pk]);
+  }, [pk, isBirdDataUpdated]);
 
   const handleOpenSightingModal = (event) => {
     setSightingIdForModal(event.target.value);

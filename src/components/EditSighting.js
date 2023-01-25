@@ -34,7 +34,7 @@ export default function EditSighting() {
     notes: '',
     image: ''
   });
-  const [selectedBird, setSelectedBird] = useState('');
+
   const [fileToUpload, setFileToUpload] = useState('');
   const [isDateTimeInputDisabled, setIsDateTimeInputDisabled] = useState(false);
   const [isEditingPhoto, setIsEditingPhoto] = useState(false);
@@ -42,7 +42,7 @@ export default function EditSighting() {
   useEffect(() => {
     API.GET(API.ENDPOINTS.singleSighting(id))
       .then(({ data }) => {
-        console.log(data)
+        console.log(data);
         setInitialSightingData(data);
         setFormFields({
           bird_sighted: data.bird_sighted.id,
@@ -67,7 +67,6 @@ export default function EditSighting() {
     API.GET(API.ENDPOINTS.allBirds)
       .then(({ data }) => {
         setAllBirds(data);
-        setSelectedBird(data[0].id);
         setFormFields({ ...formFields, bird_sighted: data[0].id });
       })
       .catch((err) => console.error(err));
@@ -76,10 +75,6 @@ export default function EditSighting() {
 
   const handleTextChange = (event) => {
     setFormFields({ ...formFields, [event.target.name]: event.target.value });
-  };
-
-  const handleBirdSelectChange = (event) => {
-    setSelectedBird(event.target.value);
   };
 
   const handleFileChange = (event) => {
@@ -185,7 +180,6 @@ export default function EditSighting() {
   }, [markerPosition]);
 
   const handleSelect = (event) => {
-    handleBirdSelectChange(event);
     handleTextChange(event);
   };
 
@@ -193,8 +187,8 @@ export default function EditSighting() {
     setIsEditingPhoto(!isEditingPhoto);
   };
 
-  if(!initialSightingData){
-    return <p>Loading data...</p>
+  if (!initialSightingData) {
+    return <p>Loading data...</p>;
   }
 
   if (isLoggedIn) {

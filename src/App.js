@@ -21,6 +21,7 @@ window.Buffer = window.Buffer || require('buffer').Buffer;
 function App() {
   const [isSightingModalOpen, setIsSightingModalOpen] = useState(false);
   const [sightingIdForModal, setSightingIdForModal] = useState(null);
+  const [isBirdDataUpdated, setIsBirdDataUpdated] = useState(false);
 
   return (
     <div id='app'>
@@ -29,6 +30,7 @@ function App() {
           <ViewSingleSightingModal
             sightingId={sightingIdForModal}
             setIsModalOpen={setIsSightingModalOpen}
+            setIsBirdDataUpdated={setIsBirdDataUpdated}
           />
         )}
         <Navbar />
@@ -66,6 +68,8 @@ function App() {
                   <BirdDetails
                     setIsSightingModalOpen={setIsSightingModalOpen}
                     setSightingIdForModal={setSightingIdForModal}
+                    isBirdDataUpdated={isBirdDataUpdated}
+                    setIsBirdDataUpdated={setIsBirdDataUpdated}
                   />
                 }
               ></PageTitle>

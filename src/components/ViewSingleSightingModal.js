@@ -1,15 +1,26 @@
+import '../styles/DeleteDialog.scss';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import UserSightingPhoto from './common/UserSightingPhoto';
 import { API } from '../lib/api';
 import { AUTH } from '../lib/auth';
-import { useAuthenticated } from '../hooks/useAuthenticated';
+import {
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions
+} from '@mui/material';
 
 export default function ViewSingleSightingModal({
   setIsModalOpen,
-  sightingId
+  sightingId, 
+  setIsBirdDataUpdated
 }) {
   const [sightingData, setSightingData] = useState(null);
+  const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+
 
   const handleClose = () => {
     setIsModalOpen(false);
@@ -23,6 +34,33 @@ export default function ViewSingleSightingModal({
       })
       .catch((err) => console.error(err));
   }, [sightingId]);
+
+  const deleteSighting = () => {
+    console.log('deleted sighting');
+    API.DELETE(API.ENDPOINTS.singleSighting(sightingId), API.getHeaders())
+      .then(() => {
+        setIsModalOpen(false);
+        setIsBirdDataUpdated(true);
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const handleDeleteAlertOpen = () => {
+    setIsDeleteAlertOpen(true);
+  };
+
+  const handleDeleteAlertClose = () => {
+    setIsDeleteAlertOpen(false);
+  };
+
+  const handleDeleteConfirm = () => {
+    deleteSighting();
+    handleDeleteAlertClose();
+  };
+
+  const handleDeleteCancel = () => {
+    handleDeleteAlertClose();
+  };
 
   return (
     <>
@@ -45,7 +83,9 @@ export default function ViewSingleSightingModal({
             )}
 
             {(AUTH.getPayload().sub === sightingData?.owner.id ||
-              AUTH.getPayload().isAdmin) && <button>Delete Sighting</button>}
+              AUTH.getPayload().isAdmin) && (
+              <button onClick={handleDeleteAlertOpen}>Delete Sighting</button>
+            )}
           </div>
           <div className='modal-content'>
             <div className='image-container'>
@@ -66,6 +106,31 @@ export default function ViewSingleSightingModal({
           </div>
         </div>
       </div>
+      <Dialog
+        className='DeleteDialog'
+        open={isDeleteAlertOpen}
+        onClose={handleDeleteAlertClose}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle color='lightseagreen' id='alert-dialog-title'>
+          {'Delete Sighting'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Are you sure you want to delete this sighting? You can't undo this
+            action!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCancel} color='primary'>
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteConfirm} color='error' autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
