@@ -16,7 +16,17 @@ export default function BirdDetails({
 }) {
   const { pk } = useParams();
   const [birdData, setBirdData] = useState(null);
+  const [sightingFilterData, setSightingFilterData] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
+  const [filters, setFilters] = useState({
+    forBirdId: '',
+    byMySightings: false,
+    dateFrom: '',
+    dateTo: '',
+    timeFrom: '',
+    timeTo: ''
+  });
+  const [areFiltersApplied, setAreFiltersApplied] = useState(false);
 
   const successCallback = (position) => {
     setMapCenter([position.coords.latitude, position.coords.longitude]);
@@ -40,6 +50,31 @@ export default function BirdDetails({
     setIsBirdDataUpdated(false);
     // eslint-disable-next-line
   }, [pk, isBirdDataUpdated]);
+
+  const handleTimeDateFilterChange = (event) => {
+    setFilters({ ...filters, [event.target.name]: true });
+  };
+  const handleMySightingFilterChange = (event) => {
+    setFilters({ ...filters, byMySightings: event.target.checked });
+  };
+  const handleApplyFilters = () => {
+    API.POST(
+      API.ENDPOINTS.filterBirdSightings,
+      { ...filters, forBirdId: pk },
+      API.getHeaders()
+    )
+      .then(({ data }) => {
+        setBirdData(data);
+        setAreFiltersApplied(true);
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const handleRemoveFilters = () => {};
+
+  useEffect(() => {
+    console.log(filters);
+  }, [filters]);
 
   return (
     <>
@@ -79,6 +114,7 @@ export default function BirdDetails({
               id='user-sightings-checkbox'
               className='checkbox'
               type='checkbox'
+              onChange={handleMySightingFilterChange}
             />
             <p>Sightings from:</p>
             <input type='date' />
@@ -90,7 +126,7 @@ export default function BirdDetails({
             <input type='time' />
             <p>and:</p>
             <input type='time' />
-            <button>Apply</button>
+            <button onClick={handleApplyFilters}>Apply</button>
             <button>Clear All</button>
           </div>
           <MapContainer

@@ -4,6 +4,7 @@ import { AUTH } from './auth';
 const ENDPOINTS = {
   allBirds: '/api/birds/',
   searchBirds: '/api/birds/search/',
+  filterBirdSightings: '/api/birds/filtersightings/',
   singleBird: (pk) => `/api/birds/${pk}/`,
   register: '/api/user/register/',
   login: '/api/user/login/',
