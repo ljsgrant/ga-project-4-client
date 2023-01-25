@@ -1,15 +1,12 @@
 import '../styles/BirdDetails.scss';
 import 'leaflet/dist/leaflet.css';
 import '../styles/common/containerStyles.scss';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
-import { Link } from 'react-router-dom';
 import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
 import MapPopup from './common/MapPopup';
 import { API } from '../lib/api';
-
-import UserSightingPhoto from './common/UserSightingPhoto';
 
 export default function BirdDetails({
   setSightingIdForModal,
@@ -44,11 +41,6 @@ export default function BirdDetails({
     // eslint-disable-next-line
   }, [pk, isBirdDataUpdated]);
 
-  const handleOpenSightingModal = (event) => {
-    setSightingIdForModal(event.target.value);
-    setIsSightingModalOpen(true);
-  };
-
   return (
     <>
       <div className='BirdDetails'>
@@ -80,6 +72,26 @@ export default function BirdDetails({
         <div className='right-column'>
           <div className='map-header '>
             <h3>User sightings of the {birdData?.name}</h3>
+          </div>
+          <div className='map-filters'>
+            <label htmlFor='user-sightings-checkbox'>My sightings only</label>
+            <input
+              id='user-sightings-checkbox'
+              className='checkbox'
+              type='checkbox'
+            />
+            <p>Sightings from:</p>
+            <input type='date' />
+            <p>until:</p>
+            <input type='date' />
+          </div>
+          <div className='map-filters'>
+            <p>Sightings between:</p>
+            <input type='time' />
+            <p>and:</p>
+            <input type='time' />
+            <button>Apply</button>
+            <button>Clear All</button>
           </div>
           <MapContainer
             center={mapCenter ? mapCenter : [51.505, -0.09]}

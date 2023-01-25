@@ -3,6 +3,9 @@
 .NewSighting {
   display: flex;
   justify-content: center;
+  align-items: flex-start;
+  height: calc(100vh - $page-title-height - $navbar-height);
+  overflow-y: scroll;
   h2,
   h3,
   p {
@@ -44,6 +47,7 @@
   }
   .right-column {
     width: 40vw;
+    height: 70vh;
     margin-left: 20px;
     .leaflet-container {
       margin-top: 3px;

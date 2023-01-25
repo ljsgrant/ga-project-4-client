@@ -9,10 +9,10 @@ export default function Navbar() {
 
   const logout = () => {
     AUTH.deleteToken();
+    navigate('/goodbye-message');
     console.log('logged out');
     setIsLoggedIn(false);
     setIsAdmin(false);
-    navigate('/');
   };
 
   return (

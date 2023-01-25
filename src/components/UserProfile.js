@@ -1,12 +1,11 @@
 import '../styles/UserProfile.scss';
 import 'leaflet/dist/leaflet.css';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { API } from '../lib/api';
 import { AUTH } from '../lib/auth';
-import UserSightingPhoto from './common/UserSightingPhoto';
 import MapPopup from './common/MapPopup';
 
 export default function UserProfile({

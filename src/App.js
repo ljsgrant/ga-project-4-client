@@ -16,6 +16,7 @@ import NewBird from './components/admin/NewBird';
 import PageTitle from './components/common/PageTitle';
 import ViewSingleSightingModal from './components/ViewSingleSightingModal';
 import Landing from './components/Landing';
+import LogOutRoute from './components/LogOutRoute';
 
 window.Buffer = window.Buffer || require('buffer').Buffer;
 
@@ -48,6 +49,7 @@ function App() {
               <PageTitle titleText={'Log In'} content={<Login />}></PageTitle>
             }
           />
+          <Route path='/goodbye-message' element={<LogOutRoute />} />
           <Route
             path='/register'
             element={
