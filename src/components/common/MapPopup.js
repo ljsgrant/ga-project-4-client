@@ -1,6 +1,6 @@
 
 
-export default function MapPopup() {
+export default function MapPopup({sightingData}) {
   return (
     <Popup>
       <div className='map-popup-content'>

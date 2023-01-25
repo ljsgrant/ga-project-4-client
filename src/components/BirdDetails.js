@@ -104,7 +104,18 @@ export default function BirdDetails({
                         {sighting.owner.username}
                       </Link>
                     </p>
-                    <p>at {sighting.sighted_at_datetime}.</p>
+                    <p>
+                      at{' '}
+                      {sighting?.sighted_at_datetime.split('T')[1].substr(0, 5)}{' '}
+                      on{' '}
+                      {sighting?.sighted_at_datetime
+                        .split('T')[0]
+                        .substr(0, 10)
+                        .split('-')
+                        .reverse()
+                        .join('/')}
+                      .
+                    </p>
                     <div className='photo-container'>
                       <UserSightingPhoto
                         className='UserSightingPhoto'

@@ -94,14 +94,31 @@ export default function ViewSingleSightingModal({
       <div className='ViewSingleSightingModal'>
         <div className='modal-container'>
           <div className='modal-header'>
-            <button aria-label='close sighting' id='close-sighting-button' onClick={handleClose}>
+            <button
+              aria-label='close sighting'
+              id='close-sighting-button'
+              onClick={handleClose}
+            >
               X
             </button>
             <h3>Sighting Details</h3>
             <h2>{sightingData?.bird_sighted.name}</h2>
             <p>
-              Sighting recorded by {sightingData?.owner.username} at{' '}
-              {sightingData?.sighted_at_datetime}
+              Sighting recorded by{' '}
+              <Link
+                to={`/user/${sightingData?.owner.id}`}
+                onClick={handleClose}
+              >
+                {sightingData?.owner.username}
+              </Link>{' '}
+              at {sightingData?.sighted_at_datetime.split('T')[1].substr(0, 5)}{' '}
+              on{' '}
+              {sightingData?.sighted_at_datetime
+                .split('T')[0]
+                .substr(0, 10)
+                .split('-')
+                .reverse()
+                .join('/')}
             </p>
           </div>
           <div className='modal-controls'></div>
