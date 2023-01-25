@@ -1,5 +1,5 @@
 import '../styles/BirdList.scss';
-import '../styles/common/containerStyles.scss'
+import '../styles/common/containerStyles.scss';
 import { API } from '../lib/api';
 import { useState, useEffect } from 'react';
 import BirdListCard from './BirdListCard';
@@ -29,7 +29,6 @@ export default function BirdList() {
       })
       .catch((err) => console.error(err));
   }, [searchTerm]);
-
 
   return (
     <div className='BirdList'>
@@ -72,6 +71,7 @@ export default function BirdList() {
             </h3>
           </div>
 
+          {singleBirdData && (
             <Link
               className='view-sightings-link'
               to={`/birds/${singleBirdData?.id}`}
@@ -79,7 +79,7 @@ export default function BirdList() {
               <p className='sightings-link-text'>View Sightings</p>
               <p className='sightings-link-icon'>&#8658;</p>
             </Link>
-
+          )}
         </div>
         <div className='image-container'>
           {singleBirdData && (
