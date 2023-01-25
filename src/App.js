@@ -1,5 +1,6 @@
 import './styles/FontStyles.scss';
 import './styles/App.scss';
+import './styles/ViewSingleSightingModal.scss';
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -13,8 +14,8 @@ import UserProfile from './components/UserProfile';
 import AdminControls from './components/admin/AdminControls';
 import NewBird from './components/admin/NewBird';
 import PageTitle from './components/common/PageTitle';
-import './styles/ViewSingleSightingModal.scss';
 import ViewSingleSightingModal from './components/ViewSingleSightingModal';
+import Landing from './components/Landing';
 
 window.Buffer = window.Buffer || require('buffer').Buffer;
 
@@ -35,7 +36,7 @@ function App() {
         )}
         <Navbar />
         <Routes>
-          <Route path='/' element={<div>Home</div>} />
+          <Route path='/' element={<Landing />} />
           <Route
             path='/admin'
             element={<PageTitle content={<AdminControls />}></PageTitle>}
