@@ -1,6 +1,7 @@
 .UserProfile {
   display: flex;
   justify-content: center;
+  align-items: center;
   padding-top: 60px;
   p,
   h2,
@@ -13,7 +14,12 @@
     height: 500px;
     border-radius: 0px 0px 10px 10px;
   }
+  .left-column {
+    margin-left: 15px;
+  }
   .right-column {
     width: 500px;
+    justify-content: center;
+    margin-left: 15px;
   }
 }

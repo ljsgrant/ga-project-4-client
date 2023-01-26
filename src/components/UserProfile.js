@@ -1,6 +1,6 @@
 import '../styles/UserProfile.scss';
 import 'leaflet/dist/leaflet.css';
-import '../styles/common/containerStyles.scss'
+import '../styles/common/containerStyles.scss';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
 import { useEffect, useState } from 'react';
@@ -30,8 +30,9 @@ export default function UserProfile({
   return (
     <div className='UserProfile'>
       <div className='left-column'>
-<div className="map-header"></div>
-        <h3>{userData?.username}'s sightings</h3>
+        <div className='map-header'>
+          <h3>{userData?.username}'s sightings</h3>
+        </div>
         <MapContainer center={[51.505, -0.09]} zoom={5} scrollWheelZoom={false}>
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -56,12 +57,32 @@ export default function UserProfile({
         </MapContainer>
       </div>
       <div className='right-column'>
-        <h3>{userData?.username}'s info</h3>
-        <p>
-          Full name: {userData?.first_name} {userData?.last_name}
-        </p>
-        <p>User ID: {userData?.id}</p>
-        <p>First joined (dd/mm/yyyy): {userData?.date_joined}</p>
+        <div className='container-style-all container-style-top'>
+          <h3>{userData?.username}'s info</h3>
+        </div>
+        <div className='container-style-all container-style-column'>
+          <p>Name: </p>
+          {userData?.first_name && userData?.last_name ? (
+            <p>
+              {userData?.first_name} {userData?.last_name}
+            </p>
+          ) : (
+            <p>Not provided</p>
+          )}
+        </div>
+        <div className='container-style-all container-style-column'>
+          <p>User ID: {userData?.id}</p>
+        </div>
+        <div className='container-style-all container-style-column'>
+          <p>
+            Joined on:{' '}
+            {userData?.date_joined.slice(0, 10).split('-').reverse().join('/')}{' '}
+            (dd/mm/yyyy)
+          </p>
+        </div>
+        <div className='container-style-all container-style-column container-style-bot'>
+          <p>Sightings: {userData?.sightings?.length}</p>
+        </div>
       </div>
     </div>
   );
