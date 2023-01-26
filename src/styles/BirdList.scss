@@ -96,6 +96,7 @@ $content-container-height: calc($BirdList-height - 150px);
     height: 100%;
     padding: 20px;
     box-sizing: border-box;
+    overflow-y: scroll;
   }
   .view-sightings-link {
     width: 180px;
