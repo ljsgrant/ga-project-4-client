@@ -3,7 +3,7 @@ import { AUTH } from './auth';
 
 const ENDPOINTS = {
   allBirds: `${process.env.REACT_APP_BASE_URL}/api/birds/`,
-  searchBirds: `${process.env.REACT_APP_BASE_URL} /api/birds/search/`,
+  searchBirds: `${process.env.REACT_APP_BASE_URL}/api/birds/search/`,
   filterBirdSightings: `${process.env.REACT_APP_BASE_URL}/api/birds/filtersightings/`,
   singleBird: (pk) => `${process.env.REACT_APP_BASE_URL}/api/birds/${pk}/`,
   register: `${process.env.REACT_APP_BASE_URL}/api/user/register/`,
