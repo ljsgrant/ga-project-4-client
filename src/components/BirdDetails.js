@@ -7,6 +7,7 @@ import { useParams } from 'react-router';
 import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
 import MapPopup from './common/MapPopup';
 import { API } from '../lib/api';
+import Loading from './common/Loading';
 
 export default function BirdDetails({
   setSightingIdForModal,
@@ -17,6 +18,8 @@ export default function BirdDetails({
   const { pk } = useParams();
   const [birdData, setBirdData] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingMap, setIsLoadingMap] = useState(false);
   const [filters, setFilters] = useState({
     forBirdId: '',
     byMySightings: false,
@@ -41,9 +44,11 @@ export default function BirdDetails({
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
     API.GET(API.ENDPOINTS.singleBird(pk))
       .then(({ data }) => {
         setBirdData(data);
+        setIsLoading(false);
       })
       .catch((err) => console.error(err));
     setIsBirdDataUpdated(false);
@@ -59,6 +64,7 @@ export default function BirdDetails({
   };
 
   const handleApplyFilters = () => {
+    setIsLoadingMap(true);
     API.POST(
       API.ENDPOINTS.filterBirdSightings,
       { ...filters, forBirdId: pk },
@@ -67,11 +73,13 @@ export default function BirdDetails({
       .then(({ data }) => {
         setBirdData(data);
         setAreFiltersApplied(true);
+        setIsLoadingMap(false);
       })
       .catch((err) => console.error(err));
   };
 
   const handleRemoveFilters = () => {
+    setIsLoadingMap(true);
     setFilters({
       forBirdId: '',
       byMySightings: false,
@@ -85,6 +93,7 @@ export default function BirdDetails({
       .then(({ data }) => {
         setBirdData(data);
         setAreFiltersApplied(false);
+        setIsLoadingMap(false);
       })
       .catch((err) => console.error(err));
   };
@@ -95,115 +104,125 @@ export default function BirdDetails({
 
   return (
     <>
-      <div className='BirdDetails'>
-        <div className='left-column'>
-          <div className='title-container'>
-            <h2>{birdData?.name}</h2>
-            {birdData && (
-              <h3>
-                (
-                <span className='scientific-name'>
-                  {birdData?.scientific_name}
-                </span>
-                )
-              </h3>
-            )}
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <div className='BirdDetails'>
+          <div className='left-column'>
+            <div className='title-container'>
+              <h2>{birdData?.name}</h2>
+              {birdData && (
+                <h3>
+                  (
+                  <span className='scientific-name'>
+                    {birdData?.scientific_name}
+                  </span>
+                  )
+                </h3>
+              )}
+            </div>
+            <div className='hero-image-container photo-container-style'>
+              <img
+                className='hero-image'
+                src={birdData?.image}
+                alt={birdData?.name}
+              />
+            </div>
+            <div className='info-text-container'>
+              <h4>Description</h4>
+              <p>{birdData?.description}</p>
+            </div>
           </div>
-          <div className='hero-image-container photo-container-style'>
-            <img
-              className='hero-image'
-              src={birdData?.image}
-              alt={birdData?.name}
-            />
-          </div>
-          <div className='info-text-container'>
-            <h4>Description</h4>
-            <p>{birdData?.description}</p>
-          </div>
-        </div>
-        <div className='right-column'>
-          <div className='map-header '>
-            <h3>User sightings of the {birdData?.name}</h3>
-          </div>
-          <div className='map-filters'>
-            <label htmlFor='user-sightings-checkbox'>My sightings only</label>
-            <input
-              id='user-sightings-checkbox'
-              className='checkbox'
-              type='checkbox'
-              disabled={areFiltersApplied}
-              checked={filters.byMySightings}
-              onChange={handleMySightingFilterChange}
-            />
-            <p>Sightings from:</p>
-            <input
-              name='dateFrom'
-              disabled={areFiltersApplied}
-              value={filters.dateFrom}
-              onChange={handleTimeDateFilterChange}
-              type='date'
-            />
-            <p>until:</p>
-            <input
-              name='dateTo'
-              disabled={areFiltersApplied}
-              value={filters.dateTo}
-              onChange={handleTimeDateFilterChange}
-              type='date'
-            />
-          </div>
-          <div className='map-filters'>
-            <p>Sightings between:</p>
-            <input
-              name='timeFrom'
-              disabled={areFiltersApplied}
-              value={filters.timeFrom}
-              onChange={handleTimeDateFilterChange}
-              type='time'
-            />
-            <p>and:</p>
-            <input
-              name='timeTo'
-              disabled={areFiltersApplied}
-              value={filters.timeTo}
-              onChange={handleTimeDateFilterChange}
-              type='time'
-            />
-            <button onClick={handleApplyFilters} disabled={areFiltersApplied}>
-              Apply
-            </button>
-            <button onClick={handleRemoveFilters} disabled={!areFiltersApplied}>
-              Clear All
-            </button>
-          </div>
-          <MapContainer
-            center={mapCenter ? mapCenter : [51.505, -0.09]}
-            zoom={5}
-            scrollWheelZoom={false}
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-            />
-            {birdData?.sightings?.map((sighting) => (
-              <Marker
-                key={sighting.id}
-                icon={DefaultMarkerIcon}
-                position={[sighting.location_lat, sighting.location_long]}
+          <div className='right-column'>
+            <div className='map-header '>
+              <h3>User sightings of the {birdData?.name}</h3>
+            </div>
+            <div className='map-filters'>
+              <label htmlFor='user-sightings-checkbox'>My sightings only</label>
+              <input
+                id='user-sightings-checkbox'
+                className='checkbox'
+                type='checkbox'
+                disabled={areFiltersApplied}
+                checked={filters.byMySightings}
+                onChange={handleMySightingFilterChange}
+              />
+              <p>Sightings from:</p>
+              <input
+                name='dateFrom'
+                disabled={areFiltersApplied}
+                value={filters.dateFrom}
+                onChange={handleTimeDateFilterChange}
+                type='date'
+              />
+              <p>until:</p>
+              <input
+                name='dateTo'
+                disabled={areFiltersApplied}
+                value={filters.dateTo}
+                onChange={handleTimeDateFilterChange}
+                type='date'
+              />
+            </div>
+            <div className='map-filters'>
+              <p>Sightings between:</p>
+              <input
+                name='timeFrom'
+                disabled={areFiltersApplied}
+                value={filters.timeFrom}
+                onChange={handleTimeDateFilterChange}
+                type='time'
+              />
+              <p>and:</p>
+              <input
+                name='timeTo'
+                disabled={areFiltersApplied}
+                value={filters.timeTo}
+                onChange={handleTimeDateFilterChange}
+                type='time'
+              />
+              <button onClick={handleApplyFilters} disabled={areFiltersApplied}>
+                Apply
+              </button>
+              <button
+                onClick={handleRemoveFilters}
+                disabled={!areFiltersApplied}
               >
-                <MapPopup
-                  sightingData={sighting}
-                  setSightingIdForModal={setSightingIdForModal}
-                  setIsSightingModalOpen={setIsSightingModalOpen}
-                />
-              </Marker>
-            ))}
-            {birdData?.sightings.length < 1 && (
-              <p className='no-sightings-message'>No sightings yet!</p>
-            )}
-          </MapContainer>
+                Clear All
+              </button>
+            </div>
+            <MapContainer
+              center={mapCenter ? mapCenter : [51.505, -0.09]}
+              zoom={5}
+              scrollWheelZoom={false}
+            >
+              {isLoadingMap ? (
+                <Loading />
+              ) : (
+                <>
+                  <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                  />
+                  {birdData?.sightings?.map((sighting) => (
+                    <Marker
+                      key={sighting.id}
+                      icon={DefaultMarkerIcon}
+                      position={[sighting.location_lat, sighting.location_long]}
+                    >
+                      <MapPopup
+                        sightingData={sighting}
+                        setSightingIdForModal={setSightingIdForModal}
+                        setIsSightingModalOpen={setIsSightingModalOpen}
+                      />
+                    </Marker>
+                  ))}
+                </>
+              )}
+            </MapContainer>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

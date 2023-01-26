@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import UserSightingPhoto from './common/UserSightingPhoto';
 import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
+import Loading from './common/Loading';
 import { API } from '../lib/api';
 import { AUTH } from '../lib/auth';
 import {
@@ -89,7 +90,7 @@ export default function ViewSingleSightingModal({
     <>
       <div className='ViewSingleSightingModal'>
         <div className='modal-container'>
-          {sightingData && (
+          {sightingData ? (
             <>
               <div className='modal-header'>
                 <button
@@ -195,6 +196,8 @@ export default function ViewSingleSightingModal({
                 </div>
               </div>
             </>
+          ) : (
+            <Loading />
           )}
         </div>
       </div>
