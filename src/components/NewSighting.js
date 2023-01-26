@@ -1,6 +1,7 @@
 import 'leaflet/dist/leaflet.css';
 import '../styles/NewSighting.scss';
 import '../styles/common/containerStyles.scss';
+import '../styles/common/buttonStyles.scss';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthenticated } from '../hooks/useAuthenticated';
@@ -264,11 +265,16 @@ export default function NewSighting() {
                 />
               </div>
               <div className='container-style-all container-style-bot'>
-                <button type='submit'>Post this sighting</button>
+                <div className='button-wrapper'>
+                  <button className='button-style-1' type='submit'>
+                    Post this sighting
+                  </button>
+                </div>
               </div>
             </form>
           </div>
           <div className='right-column'>
+            <div className="map-header"><p>Drag the marker on the map to set sighting location</p></div>
             <MapContainer
               center={[51.505, -0.09]}
               zoom={5}

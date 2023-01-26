@@ -49,6 +49,21 @@
     width: 40vw;
     height: 70vh;
     margin-left: 20px;
+    margin-top: 20px;
+    .map-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(170, 211, 223, 0.573);
+      border-radius: 10px 10px 0px 0px;
+      width: 100%;
+      padding: 15px 10px;
+      box-sizing: border-box;
+      h3 {
+        text-align: center;
+      }
+    }
     .leaflet-container {
       margin-top: 3px;
       width: 100%;

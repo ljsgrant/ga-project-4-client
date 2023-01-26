@@ -1,5 +1,6 @@
 import '../styles/UserProfile.scss';
 import 'leaflet/dist/leaflet.css';
+import '../styles/common/containerStyles.scss'
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
 import { useEffect, useState } from 'react';
@@ -29,6 +30,7 @@ export default function UserProfile({
   return (
     <div className='UserProfile'>
       <div className='left-column'>
+<div className="map-header"></div>
         <h3>{userData?.username}'s sightings</h3>
         <MapContainer center={[51.505, -0.09]} zoom={5} scrollWheelZoom={false}>
           <TileLayer
