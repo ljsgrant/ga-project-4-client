@@ -1,0 +1,131 @@
+@import './variables';
+
+$BirdList-height: calc(99vh - $navbar-height - $page-title-height);
+$content-container-height: calc($BirdList-height - 150px);
+
+.BirdList {
+  height: $BirdList-height;
+  background-color: white;
+  padding-left: 10px;
+  box-sizing: border-box;
+  display: flex;
+  h2,
+  h3,
+  p {
+    margin: 0;
+  }
+
+  .left-column {
+    margin-top: 0;
+    .title-container {
+      height: $title-container-height;
+      width: 50vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .content-container {
+      width: 50vw;
+      max-height: $content-container-height;
+      .search-container {
+        background-color: $theme-color-container;
+        padding: 10px 20px;
+        margin-bottom: 5px;
+        border-radius: 10px 10px 0px 0px;
+        input {
+          height: 25px;
+          width: 400px;
+        }
+      }
+      .list-container {
+        height: $content-container-height;
+        border-radius: 0px 0px 10px 10px;
+        background-color: $theme-color-container;
+        padding: 10px;
+        overflow-y: scroll;
+        .list-headers {
+          display: flex;
+          justify-content: space-between;
+          padding: 0px 15px;
+        }
+        h3 {
+          margin: 0;
+        }
+      }
+    }
+  }
+  .right-column {
+    display: flex;
+    width: 50vw;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 70px;
+    .bird-name-container {
+      height: 60px;
+      padding: 20px 20px;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: $theme-color-container;
+      width: 95%;
+      margin-bottom: 5px;
+      border-radius: 10px 10px 0px 0px;
+      .bird-names {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+    .image-container {
+      height: 60%;
+      width: 95%;
+      background-color: $theme-color-darker;
+      display: flex;
+      justify-content: center;
+      .bird-image {
+        max-height: 100%;
+        background-color: $theme-color-darker;
+
+        object-fit: cover;
+      }
+    }
+    .info-container {
+      background-color: $theme-color-container;
+      width: 95%;
+      margin-top: 5px;
+      height: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow-y: scroll;
+    }
+    .view-sightings-link {
+      width: 180px;
+      height: 100px;
+      font-size: 120%;
+      font-weight: bolder;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 5px solid white;
+      background-color: $theme-color-main;
+      color: white;
+      box-sizing: border-box;
+      text-decoration: none;
+      z-index: 10000000;
+      .sightings-link-text {
+        text-align: center;
+      }
+      .sightings-link-icon {
+        margin: 15px;
+        font-size: 120%;
+      }
+      &:hover {
+        background-color: $theme-color-main_button-hover;
+        color: black;
+      }
+    }
+  }
+}

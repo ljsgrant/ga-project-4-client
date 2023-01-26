@@ -1,0 +1,20 @@
+@import './variables';
+
+.map-popup-content {
+  display: flex;
+  flex-direction: column;
+  .photo-container {
+    height: 150px;
+    width: 100%;
+    // border: 5px solid pink;
+    margin: 10px 0px;
+  }
+  .no-photo-container {
+    margin: 5px 0px 10px 0px;
+  }
+  p,
+  h4 {
+    text-align: center;
+    margin: 0;
+  }
+}

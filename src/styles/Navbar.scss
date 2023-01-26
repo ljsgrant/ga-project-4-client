@@ -1,0 +1,73 @@
+@import './variables';
+
+.Navbar {
+  width: 100%;
+  height: $navbar-height;
+  background-color: lightseagreen;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  h1 {
+    width: 50px;
+    display: inline-block;
+  }
+  .nav-left,
+  .nav-right {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+  .nav-left {
+    flex-basis: 50%;
+    padding-left: 35px;
+  }
+  .nav-right {
+    flex-basis: 20%;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 35px;
+  }
+  ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0px;
+    list-style: none;
+    height: 100%;
+    li {
+      margin-right: 2px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .nav-link {
+        text-decoration: none;
+        height: 80%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 10px;
+        font-size: 110%;
+        border-radius: 5px;
+        color: black;
+        &:hover {
+          background-color: rgb(0, 151, 144);
+          color: white;
+        }
+      }
+    }
+  }
+  button {
+    height: 80%;
+    padding: 0 10px;
+    border-radius: 10px;
+    border: none;
+    font-size: 110%;
+    cursor: pointer;
+    margin-left: 5px;
+    &:hover {
+      background-color: rgb(0, 129, 123);
+      color: white;
+    }
+  }
+}
