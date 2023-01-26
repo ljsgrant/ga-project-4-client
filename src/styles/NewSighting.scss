@@ -24,6 +24,10 @@
     align-items: center;
     margin-right: 20px;
     form {
+      .container-style-top{
+        display: flex;
+        flex-direction: column;
+      }
       width: 100%;
       display: flex;
       flex-direction: column;

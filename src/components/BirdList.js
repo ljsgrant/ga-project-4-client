@@ -4,6 +4,7 @@ import { API } from '../lib/api';
 import { useState, useEffect } from 'react';
 import BirdListCard from './BirdListCard';
 import { Link } from 'react-router-dom';
+import Loading from './common/Loading';
 
 export default function BirdList() {
   const [birdData, setBirdData] = useState(null);
@@ -52,13 +53,19 @@ export default function BirdList() {
               <h3>Common Name</h3>
               <h3>Latin Name</h3>
             </div>
-            {birdData?.map((bird) => (
-              <BirdListCard
-                setSingleBirdData={setSingleBirdData}
-                key={bird.id}
-                bird={bird}
-              />
-            ))}
+            <div className='bird-card-list'>
+              {birdData ? (
+                birdData?.map((bird) => (
+                  <BirdListCard
+                    setSingleBirdData={setSingleBirdData}
+                    key={bird.id}
+                    bird={bird}
+                  />
+                ))
+              ) : (
+                <Loading />
+              )}
+            </div>
           </div>
         </div>
       </div>
