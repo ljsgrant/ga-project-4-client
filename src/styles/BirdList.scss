@@ -16,6 +16,7 @@ $content-container-height: calc($BirdList-height - 150px);
   }
 }
 .left-column {
+  margin-top: 0;
   .title-container {
     height: $title-container-height;
     width: 50vw;
@@ -58,8 +59,8 @@ $content-container-height: calc($BirdList-height - 150px);
   width: 50vw;
   flex-direction: column;
   justify-content: flex-start;
-  padding-top: $title-container-height;
   align-items: center;
+  margin-top: 70px;
   .bird-name-container {
     height: 60px;
     padding: 20px 20px;
