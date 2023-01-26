@@ -86,7 +86,6 @@ $content-container-height: calc($BirdList-height - 150px);
       .bird-image {
         max-height: 100%;
         background-color: $theme-color-darker;
-
         object-fit: cover;
       }
     }
