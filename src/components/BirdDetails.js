@@ -16,7 +16,6 @@ export default function BirdDetails({
 }) {
   const { pk } = useParams();
   const [birdData, setBirdData] = useState(null);
-  const [sightingFilterData, setSightingFilterData] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
   const [filters, setFilters] = useState({
     forBirdId: '',
@@ -72,7 +71,23 @@ export default function BirdDetails({
       .catch((err) => console.error(err));
   };
 
-  const handleRemoveFilters = () => {};
+  const handleRemoveFilters = () => {
+    setFilters({
+      forBirdId: '',
+      byMySightings: false,
+      dateFrom: '',
+      dateTo: '',
+      timeFrom: '',
+      timeTo: ''
+    });
+
+    API.GET(API.ENDPOINTS.singleBird(pk))
+      .then(({ data }) => {
+        setBirdData(data);
+        setAreFiltersApplied(false);
+      })
+      .catch((err) => console.error(err));
+  };
 
   useEffect(() => {
     console.log(birdData);
@@ -116,17 +131,23 @@ export default function BirdDetails({
               id='user-sightings-checkbox'
               className='checkbox'
               type='checkbox'
+              disabled={areFiltersApplied}
+              checked={filters.byMySightings}
               onChange={handleMySightingFilterChange}
             />
             <p>Sightings from:</p>
             <input
               name='dateFrom'
+              disabled={areFiltersApplied}
+              value={filters.dateFrom}
               onChange={handleTimeDateFilterChange}
               type='date'
             />
             <p>until:</p>
             <input
               name='dateTo'
+              disabled={areFiltersApplied}
+              value={filters.dateTo}
               onChange={handleTimeDateFilterChange}
               type='date'
             />
@@ -135,17 +156,25 @@ export default function BirdDetails({
             <p>Sightings between:</p>
             <input
               name='timeFrom'
+              disabled={areFiltersApplied}
+              value={filters.timeFrom}
               onChange={handleTimeDateFilterChange}
               type='time'
             />
             <p>and:</p>
             <input
               name='timeTo'
+              disabled={areFiltersApplied}
+              value={filters.timeTo}
               onChange={handleTimeDateFilterChange}
               type='time'
             />
-            <button onClick={handleApplyFilters}>Apply</button>
-            <button>Clear All</button>
+            <button onClick={handleApplyFilters} disabled={areFiltersApplied}>
+              Apply
+            </button>
+            <button onClick={handleRemoveFilters} disabled={!areFiltersApplied}>
+              Clear All
+            </button>
           </div>
           <MapContainer
             center={mapCenter ? mapCenter : [51.505, -0.09]}
