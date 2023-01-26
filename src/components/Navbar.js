@@ -4,48 +4,87 @@ import { useAuthenticated } from '../hooks/useAuthenticated';
 import { AUTH } from '../lib/auth';
 
 export default function Navbar() {
-  const [isLoggedIn, setIsLoggedIn] = useAuthenticated();
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin] = useAuthenticated();
 
   const logout = () => {
     AUTH.deleteToken();
+    navigate('/goodbye-message');
     console.log('logged out');
     setIsLoggedIn(false);
-    navigate('/');
+    setIsAdmin(false);
   };
 
   return (
-    <div className='Navbar'>
-      <div className='nav-left'>
-        <ul>
-          <li>
-            <Link to='/'>Home</Link>
-          </li>
-          <li>
-            <Link to='/birds'>Birds</Link>
-          </li>
-          {isLoggedIn && (
+    <>
+      <div className='Navbar'>
+        <div className='nav-left'>
+          <div className='site-title-wrapper'>
+            <h1>birdl</h1>
+          </div>
+          <ul>
             <li>
-              <Link to='/add-new-sighting'>Post New Sighting</Link>
+              <Link className='nav-link' to='/'>
+                Home
+              </Link>
             </li>
-          )}
-          {isLoggedIn ? (
             <li>
-              <button onClick={logout}>Log Out</button>
+              <Link className='nav-link' to='/birds'>
+                Birds
+              </Link>
             </li>
-          ) : (
-            <>
-              {' '}
+            {isLoggedIn && (
               <li>
-                <Link to='/login'>Log In</Link>
+                <Link className='nav-link' to='/add-new-sighting'>
+                  Record Sighting
+                </Link>
               </li>
+            )}
+
+            {isAdmin && (
               <li>
-                <Link to='/register'>Register</Link>
+                <Link className='nav-link' to='/admin'>
+                  {' '}
+                  Admin Controls
+                </Link>
               </li>
-            </>
-          )}
-        </ul>
+            )}
+          </ul>
+        </div>
+        <div className='nav-right'>
+          <ul>
+            {isLoggedIn ? (
+              <>
+                <li>
+                  <Link
+                    className='nav-link'
+                    to={`/user/${AUTH.getPayload().sub}`}
+                  >
+                    Your Profile
+                  </Link>
+                </li>
+                <li>
+                  <button onClick={logout}>Log Out</button>
+                </li>
+              </>
+            ) : (
+              <>
+                {' '}
+                <li>
+                  <Link className='nav-link' to='/login'>
+                    Log In
+                  </Link>
+                </li>
+                <li>
+                  <Link className='nav-link' to='/register'>
+                    Register
+                  </Link>
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

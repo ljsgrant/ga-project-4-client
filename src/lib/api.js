@@ -4,11 +4,14 @@ import { AUTH } from './auth';
 const ENDPOINTS = {
   allBirds: '/api/birds/',
   searchBirds: '/api/birds/search/',
+  filterBirdSightings: '/api/birds/filtersightings/',
   singleBird: (pk) => `/api/birds/${pk}/`,
   register: '/api/user/register/',
   login: '/api/user/login/',
   singleUser: (pk) => `/api/user/${pk}/`,
-  sightings: '/api/sightings/'
+  sightings: '/api/sightings/',
+  singleSighting: (pk) => `/api/sightings/${pk}/`,
+  cloudinary: `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`
 };
 
 const GET = (endpoint) => axios.get(endpoint);

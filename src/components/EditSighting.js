@@ -1,44 +1,72 @@
 import 'leaflet/dist/leaflet.css';
 import '../styles/NewSighting.scss';
+import '../styles/EditSighting.scss';
 import '../styles/common/containerStyles.scss';
-import '../styles/common/buttonStyles.scss';
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuthenticated } from '../hooks/useAuthenticated';
 import { Marker, MapContainer, TileLayer } from 'react-leaflet';
 import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
-import PageMessage from './common/PageMessage';
 import { API } from '../lib/api';
+import UserSightingPhoto from './common/UserSightingPhoto';
+import PageMessage from './common/PageMessage';
 import EXIF from 'exif-js';
 
-export default function NewSighting() {
+export default function EditSighting() {
   const navigate = useNavigate();
   const [isLoggedIn] = useAuthenticated();
+  const { id } = useParams();
   const markerRef = useRef(null);
   const fileInputRef = useRef(null);
+
   const [markerPosition, setMarkerPosition] = useState({
     lat: 51.53606314086357,
     lng: -0.3515625
   });
 
+  const [initialSightingData, setInitialSightingData] = useState(null);
   const [allBirds, setAllBirds] = useState(null);
   const [formFields, setFormFields] = useState({
-    bird_sighted: null,
-    sighted_at_datetime: null,
+    bird_sighted: '',
+    sighted_at_datetime: '',
     location_lat: 0,
     location_long: 0,
     notes: '',
     image: ''
   });
-  const [selectedBird, setSelectedBird] = useState('');
+
   const [fileToUpload, setFileToUpload] = useState('');
   const [isDateTimeInputDisabled, setIsDateTimeInputDisabled] = useState(false);
+  const [isEditingPhoto, setIsEditingPhoto] = useState(false);
+
+  useEffect(() => {
+    API.GET(API.ENDPOINTS.singleSighting(id))
+      .then(({ data }) => {
+        console.log(data);
+        setInitialSightingData(data);
+        setFormFields({
+          bird_sighted: data.bird_sighted.id,
+          sighted_at_datetime:
+            data.sighted_at_datetime.length > 16
+              ? data.sighted_at_datetime.slice(0, 16)
+              : data.sighted_at_datetime,
+          location_lat: data.location_lat,
+          location_long: data.location_long,
+          notes: data.notes,
+          image: data.image
+        });
+        setMarkerPosition({
+          lat: data.location_lat,
+          lng: data.location_long
+        });
+      })
+      .catch((err) => console.error(err));
+  }, [id]);
 
   useEffect(() => {
     API.GET(API.ENDPOINTS.allBirds)
       .then(({ data }) => {
         setAllBirds(data);
-        setSelectedBird(data[0].id);
         setFormFields({ ...formFields, bird_sighted: data[0].id });
       })
       .catch((err) => console.error(err));
@@ -47,10 +75,6 @@ export default function NewSighting() {
 
   const handleTextChange = (event) => {
     setFormFields({ ...formFields, [event.target.name]: event.target.value });
-  };
-
-  const handleBirdSelectChange = (event) => {
-    setSelectedBird(event.target.value);
   };
 
   const handleFileChange = (event) => {
@@ -81,7 +105,7 @@ export default function NewSighting() {
     } else {
       setFormFields({
         ...formFields,
-        sighted_at_datetime: null
+        sighted_at_datetime: ''
       });
     }
   };
@@ -89,34 +113,44 @@ export default function NewSighting() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const imageData = new FormData();
-    imageData.append('file', fileToUpload);
-    imageData.append(
-      'upload_preset',
-      process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET
-    );
-    try {
-      const cloudinaryResponse = await API.POST(
-        API.ENDPOINTS.cloudinary,
-        imageData
+    if (fileToUpload) {
+      const imageData = new FormData();
+      imageData.append('file', fileToUpload);
+      imageData.append(
+        'upload_preset',
+        process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET
       );
-      console.log(cloudinaryResponse.data);
-      const imageId = cloudinaryResponse.data.public_id;
-      const requestBody = {
-        ...formFields,
-        image: imageId
-      };
-      console.log(requestBody);
+      try {
+        const cloudinaryResponse = await API.POST(
+          API.ENDPOINTS.cloudinary,
+          imageData
+        );
+        console.log(cloudinaryResponse.data);
+        const imageId = cloudinaryResponse.data.public_id;
+        const requestBody = {
+          ...formFields,
+          image: imageId
+        };
 
-      API.POST(API.ENDPOINTS.sightings, requestBody, API.getHeaders())
+        API.PUT(API.ENDPOINTS.singleSighting(id), requestBody, API.getHeaders())
+          .then(({ data }) => {
+            console.log(data);
+            console.log('edited sighting!');
+            navigate(`/birds/${formFields.bird_sighted}`);
+          })
+          .catch((error) => console.error(error));
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      console.log(formFields);
+      API.PUT(API.ENDPOINTS.singleSighting(id), formFields, API.getHeaders())
         .then(({ data }) => {
           console.log(data);
-          console.log('created sighting!');
+          console.log('edited sighting!');
           navigate(`/birds/${formFields.bird_sighted}`);
         })
         .catch((error) => console.error(error));
-    } catch (error) {
-      console.error(error);
     }
   };
 
@@ -146,13 +180,16 @@ export default function NewSighting() {
   }, [markerPosition]);
 
   const handleSelect = (event) => {
-    handleBirdSelectChange(event);
     handleTextChange(event);
   };
 
-  useEffect(() => {
-    console.log(formFields);
-  }, [formFields]);
+  const handleEditingPhotoToggle = () => {
+    setIsEditingPhoto(!isEditingPhoto);
+  };
+
+  if (!initialSightingData) {
+    return <p>Loading data...</p>;
+  }
 
   if (isLoggedIn) {
     return (
@@ -164,7 +201,7 @@ export default function NewSighting() {
                 <label htmlFor='select-bird'>Bird</label>
                 <select
                   id='select-bird'
-                  value={selectedBird}
+                  value={formFields.bird_sighted && formFields.bird_sighted}
                   onChange={handleSelect}
                   name='bird_sighted'
                 >
@@ -193,6 +230,10 @@ export default function NewSighting() {
                     id='sighted-at-datetime'
                     name='sighted_at_datetime'
                     type='datetime-local'
+                    value={
+                      formFields.sighted_at_datetime &&
+                      formFields.sighted_at_datetime
+                    }
                     onChange={handleTextChange}
                     disabled={isDateTimeInputDisabled}
                     required
@@ -205,7 +246,7 @@ export default function NewSighting() {
                   id='lat'
                   name='lat'
                   onChange={handleLatLongTextChange}
-                  value={markerPosition.lat}
+                  value={formFields.location_lat && formFields.location_lat}
                   required
                 />
                 <label htmlFor='long'>Longitude:</label>
@@ -213,23 +254,39 @@ export default function NewSighting() {
                   id='long'
                   name='lng'
                   onChange={handleLatLongTextChange}
-                  value={markerPosition.lng}
+                  value={formFields.location_long && formFields.location_long}
                   required
                 />
               </div>
               <div className='photo-upload-container container-style-all container-style-column'>
                 <div>
-                  <label htmlFor='sighting-photo-upload'>
-                    <h3>Upload photo:</h3>
-                  </label>
-                  <input
-                    type='file'
-                    id='sighting-photo-upload'
-                    name='sighting-photo-upload'
-                    accept='image/png, image/jpeg, image/tiff'
-                    onChange={handleFileChange}
-                    ref={fileInputRef}
-                  ></input>
+                  {isEditingPhoto ? (
+                    <>
+                      {' '}
+                      <label htmlFor='sighting-photo-upload'>
+                        Photo Upload
+                      </label>
+                      <input
+                        type='file'
+                        id='sighting-photo-upload'
+                        name='sighting-photo-upload'
+                        accept='image/png, image/jpeg, image/tiff'
+                        onChange={handleFileChange}
+                        ref={fileInputRef}
+                      ></input>
+                    </>
+                  ) : (
+                    <>
+                      <div className='old-photo'>
+                        <UserSightingPhoto
+                          cloudinaryImageId={initialSightingData?.image}
+                        />
+                      </div>
+                      <button type='button' onClick={handleEditingPhotoToggle}>
+                        Change photo
+                      </button>
+                    </>
+                  )}
                 </div>
                 {fileToUpload && (
                   <div>
@@ -244,14 +301,6 @@ export default function NewSighting() {
                     />
                   </div>
                 )}
-                <p>
-                  (
-                  <em>
-                    This isn't required, but we encourage it as proof of the
-                    sighting - and it's nicer for other users to look at!
-                  </em>
-                  )
-                </p>
               </div>
               <div className='container-style-all container-style-column'>
                 <label htmlFor='notes'>
@@ -261,20 +310,16 @@ export default function NewSighting() {
                   id='notes'
                   name='notes'
                   onChange={handleTextChange}
+                  value={formFields.notes && formFields.notes}
                   required
                 />
               </div>
               <div className='container-style-all container-style-bot'>
-                <div className='button-wrapper'>
-                  <button className='button-style-1' type='submit'>
-                    Post this sighting
-                  </button>
-                </div>
+                <button type='submit'>Update Sighting</button>
               </div>
             </form>
           </div>
           <div className='right-column'>
-            <div className="map-header"><p>Drag the marker on the map to set sighting location</p></div>
             <MapContainer
               center={[51.505, -0.09]}
               zoom={5}

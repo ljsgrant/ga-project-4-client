@@ -1,15 +1,23 @@
+@import './variables';
+
 .NewSighting {
   display: flex;
   justify-content: center;
-  padding-top: 20px;
+  align-items: flex-start;
+  height: calc(100vh - $page-title-height - $navbar-height);
+  overflow-y: scroll;
   h2,
   h3,
   p {
     padding: 0;
     margin: 0;
   }
+  h3 {
+    text-align: center;
+  }
   .left-column {
     width: 40vw;
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -19,14 +27,43 @@
       width: 100%;
       display: flex;
       flex-direction: column;
+      #sighting-photo-upload {
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
       textarea {
         min-height: 250px;
+        max-height: 250px;
+        min-width: 100%;
+        max-width: 100%;
+        border: none;
+      }
+      .datetime-wrapper {
+        display: flex;
       }
     }
   }
   .right-column {
     width: 40vw;
+    height: 70vh;
     margin-left: 20px;
+    margin-top: 20px;
+    .map-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(170, 211, 223, 0.573);
+      border-radius: 10px 10px 0px 0px;
+      width: 100%;
+      padding: 15px 10px;
+      box-sizing: border-box;
+      h3 {
+        text-align: center;
+      }
+    }
     .leaflet-container {
       margin-top: 3px;
       width: 100%;
