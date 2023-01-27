@@ -11,7 +11,9 @@ import MapPopup from './common/MapPopup';
 
 export default function UserProfile({
   setSightingIdForModal,
-  setIsSightingModalOpen
+  setIsSightingModalOpen,
+  isBirdDataUpdated,
+  setIsBirdDataUpdated
 }) {
   const { pk } = useParams();
   const [userData, setUserData] = useState(null);
@@ -21,7 +23,9 @@ export default function UserProfile({
     API.GET(API.ENDPOINTS.singleUser(pk))
       .then(({ data }) => setUserData(data))
       .catch((err) => console.error(err));
-  }, [pk]);
+    setIsBirdDataUpdated(false);
+    // eslint-disable-next-line
+  }, [pk, isBirdDataUpdated]);
 
   useEffect(() => {
     console.log(userData);

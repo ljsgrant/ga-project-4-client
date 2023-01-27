@@ -65,6 +65,8 @@ function App() {
               <UserProfile
                 setSightingIdForModal={setSightingIdForModal}
                 setIsSightingModalOpen={setIsSightingModalOpen}
+                isBirdDataUpdated={isBirdDataUpdated}
+                setIsBirdDataUpdated={setIsBirdDataUpdated}
               />
             }
           />
