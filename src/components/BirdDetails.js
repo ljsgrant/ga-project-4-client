@@ -9,6 +9,7 @@ import { DefaultMarkerIcon } from './common/DefaultMarkerIcon';
 import MapPopup from './common/MapPopup';
 import { API } from '../lib/api';
 import Loading from './common/Loading';
+import { useAuthenticated } from '../hooks/useAuthenticated.js';
 
 export default function BirdDetails({
   setSightingIdForModal,
@@ -17,6 +18,7 @@ export default function BirdDetails({
   setIsBirdDataUpdated
 }) {
   const { pk } = useParams();
+  const [isLoggedIn] = useAuthenticated();
   const [birdData, setBirdData] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -134,82 +136,86 @@ export default function BirdDetails({
             <div className='map-header '>
               <h3>User sightings of the {birdData?.name}</h3>
             </div>
-            <div className='map-filters'>
-              <div className='single-filter-wrapper'>
-                <h3>Filters: </h3>
-                <button
-                  onClick={handleApplyFilters}
-                  disabled={areFiltersApplied}
-                  className='button-style-small'
-                >
-                  Apply
-                </button>
-                <button
-                  onClick={handleRemoveFilters}
-                  disabled={!areFiltersApplied}
-                  className='button-style-small'
-                >
-                  Clear All
-                </button>
-              </div>
-              <div className='single-filter-wrapper'>
-                <p>From date:</p>
-                <input
-                  name='dateFrom'
-                  className='input-date'
-                  disabled={areFiltersApplied}
-                  value={filters.dateFrom}
-                  onChange={handleTimeDateFilterChange}
-                  type='date'
-                />
-                <p>until:</p>
-                <input
-                  name='dateTo'
-                  className='input-date'
-                  disabled={areFiltersApplied}
-                  value={filters.dateTo}
-                  onChange={handleTimeDateFilterChange}
-                  type='date'
-                />
-              </div>
-            </div>
-            <div className='map-filters'>
-              <div className='single-filter-wrapper'>
-                <p>Between time:</p>
-                <input
-                  name='timeFrom'
-                  className='input-time'
-                  disabled={areFiltersApplied}
-                  value={filters.timeFrom}
-                  onChange={handleTimeDateFilterChange}
-                  type='time'
-                />
-                <p>and:</p>
-                <input
-                  name='timeTo'
-                  className='input-time'
-                  disabled={areFiltersApplied}
-                  value={filters.timeTo}
-                  onChange={handleTimeDateFilterChange}
-                  type='time'
-                />
-              </div>
-              <div className='single-filter-wrapper'>
-                <p>
-                  <label htmlFor='user-sightings-checkbox'>
-                    My sightings only:
-                  </label>
-                </p>
-                <input
-                  id='user-sightings-checkbox'
-                  className='checkbox'
-                  type='checkbox'
-                  disabled={areFiltersApplied}
-                  checked={filters.byMySightings}
-                  onChange={handleMySightingFilterChange}
-                />
-              </div>
-            </div>
+            {isLoggedIn ? (
+              <>
+                <div className='map-filters'>
+                  <div className='single-filter-wrapper'>
+                    <h3>Filters: </h3>
+                    <button
+                      onClick={handleApplyFilters}
+                      disabled={areFiltersApplied}
+                      className='button-style-small'
+                    >
+                      Apply
+                    </button>
+                    <button
+                      onClick={handleRemoveFilters}
+                      disabled={!areFiltersApplied}
+                      className='button-style-small'
+                    >
+                      Clear All
+                    </button>
+                  </div>
+                  <div className='single-filter-wrapper'>
+                    <p>From date:</p>
+                    <input
+                      name='dateFrom'
+                      className='input-date'
+                      disabled={areFiltersApplied}
+                      value={filters.dateFrom}
+                      onChange={handleTimeDateFilterChange}
+                      type='date'
+                    />
+                    <p>until:</p>
+                    <input
+                      name='dateTo'
+                      className='input-date'
+                      disabled={areFiltersApplied}
+                      value={filters.dateTo}
+                      onChange={handleTimeDateFilterChange}
+                      type='date'
+                    />
+                  </div>
+                </div>
+                <div className='map-filters'>
+                  <div className='single-filter-wrapper'>
+                    <p>Between time:</p>
+                    <input
+                      name='timeFrom'
+                      className='input-time'
+                      disabled={areFiltersApplied}
+                      value={filters.timeFrom}
+                      onChange={handleTimeDateFilterChange}
+                      type='time'
+                    />
+                    <p>and:</p>
+                    <input
+                      name='timeTo'
+                      className='input-time'
+                      disabled={areFiltersApplied}
+                      value={filters.timeTo}
+                      onChange={handleTimeDateFilterChange}
+                      type='time'
+                    />
+                  </div>
+                  <div className='single-filter-wrapper'>
+                    <p>
+                      <label htmlFor='user-sightings-checkbox'>
+                        My sightings only:
+                      </label>
+                    </p>
+                    <input
+                      id='user-sightings-checkbox'
+                      className='checkbox'
+                      type='checkbox'
+                      disabled={areFiltersApplied}
+                      checked={filters.byMySightings}
+                      onChange={handleMySightingFilterChange}
+                    />
+                  </div>
+                </div>
+              </>
+            ) : (<div className=''><p>Log in to filter sightings</p></div>)}
             <MapContainer
               center={mapCenter ? mapCenter : [51.505, -0.09]}
               zoom={5}
