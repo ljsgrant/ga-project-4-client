@@ -1,3 +1,4 @@
+@import './mixins/breakpoints';
 @import './variables';
 
 .NewSighting {
@@ -15,6 +16,20 @@
   h3 {
     text-align: center;
   }
+  @include small {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100vw;
+    height: 100%;
+  }
+  @include medium {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    height: calc(100vh - $page-title-height - $navbar-height);
+    overflow-y: scroll;
+  }
   .left-column {
     width: 40vw;
     margin-top: 20px;
@@ -24,7 +39,7 @@
     align-items: center;
     margin-right: 20px;
     form {
-      .container-style-top{
+      .container-style-top {
         display: flex;
         flex-direction: column;
       }

@@ -89,35 +89,42 @@ export default function NewSighting() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const imageData = new FormData();
-    imageData.append('file', fileToUpload);
-    imageData.append(
-      'upload_preset',
-      process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET
-    );
-    try {
-      const cloudinaryResponse = await API.POST(
-        API.ENDPOINTS.cloudinary,
-        imageData
+    let requestBody;
+    if (fileToUpload) {
+      const imageData = new FormData();
+      imageData.append('file', fileToUpload);
+      imageData.append(
+        'upload_preset',
+        process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET
       );
-      console.log(cloudinaryResponse.data);
-      const imageId = cloudinaryResponse.data.public_id;
-      const requestBody = {
-        ...formFields,
-        image: imageId
+      try {
+        const cloudinaryResponse = await API.POST(
+          API.ENDPOINTS.cloudinary,
+          imageData
+        );
+        console.log(cloudinaryResponse.data);
+        const imageId = cloudinaryResponse.data.public_id;
+        requestBody = {
+          ...formFields,
+          image: imageId
+        };
+        console.log(requestBody);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      requestBody = {
+        ...formFields
       };
-      console.log(requestBody);
-
-      API.POST(API.ENDPOINTS.sightings, requestBody, API.getHeaders())
-        .then(({ data }) => {
-          console.log(data);
-          console.log('created sighting!');
-          navigate(`/birds/${formFields.bird_sighted}`);
-        })
-        .catch((error) => console.error(error));
-    } catch (error) {
-      console.error(error);
     }
+
+    API.POST(API.ENDPOINTS.sightings, requestBody, API.getHeaders())
+      .then(({ data }) => {
+        console.log(data);
+        console.log('created sighting!');
+        navigate(`/birds/${formFields.bird_sighted}`);
+      })
+      .catch((error) => console.error(error));
   };
 
   function movedMarker(event) {
@@ -274,7 +281,9 @@ export default function NewSighting() {
             </form>
           </div>
           <div className='right-column'>
-            <div className="map-header"><p>Drag the marker on the map to set sighting location</p></div>
+            <div className='map-header'>
+              <p>Drag the marker on the map to set sighting location</p>
+            </div>
             <MapContainer
               center={[51.505, -0.09]}
               zoom={5}
