@@ -13,7 +13,50 @@ This was my final project for 3-month Software Engineering Immersive course with
 ![single bird page](/readme_assets/project-4-bird.png)
 
 ## Contents
-Contents with links to headings here
+
+* **[Brief](#brief)**
+* **[Timeframe & Team](#timeframe--team)**
+* **[Technologies Used](#technologies-used)**
+* **[Installation Requirements](#installation-requirements)**
+* **[Code Installation](#code-installation)**
+
+**[Development Process Write-Up:](#development-process-write-up)**
+* **[Planning](#planning)**
+  * [Database](#database)
+  * [Wireframing](#wireframing)
+  * [Interactive Maps](#interactive-maps)
+  * [Trello](#trello)
+* **[Coding](#coding)**
+  * [General Approach and Process](#general-approach--process)
+  * [Back-End: Registration and Login](#back-end-registration-and-login)
+  * [Back-End: Setting up Models and Serializers](#back-end-setting-up-models-and-serializers)
+  * [Front-End: Setup & Basics](#front-end-setup--basics)
+  * [Front-End: Login & Register](#front-end-login--register)
+  * [Bird Details, Maps to Show Sighting Data](#bird-details-maps-to-show-sighting-data)
+  * [Adding Interactive Maps to Input Data](#adding-interactive-maps-to-input-data)
+  * [Latitude/Longitude Inputs & Marker Position](#latitudelongitude-inputs--marker-position)
+  * [List of All Birds](#list-of-all-birds)
+  * [Searching Birds](#searching-birds)
+    * [Overview](#overview)
+    * [API](#api-2)
+    * [Client](#client)
+  * [Sighting Photos](#sighting-photos)
+    * [Uploading Photos](#uploading-photos)
+    * [Displaying Photos](#displaying-photos)
+  * [Using Photo Metadata for Timestamps](#using-photo-metadata-for-timestamps)
+  * [Single Sighting Modal](#single-sighting-modal)
+    * [Modal Tabs](#modal-tabs)
+  * [Editing Sightings](#editing-sightings)
+  * [Deleting Sightings](#deleting-sightings)
+  * [Adding Map Filters](#adding-map-filters)
+    * [Filtering sightings by date range](#filtering-sightings-by-date-range)
+    * [Filtering sightings by time range](#filtering-sightings-by-time-range)
+    * [Implementing map filters in the front end](#implementing-map-filters-in-the-front-end)
+  * [Styling](#styling)
+  * [Final Tweaks](#final-tweaks)
+* **[Future Improvements](#future-improvements)**
+* **[Bugs](#bugs)**
+* **[Takeaways & Key Learnings](#takeaways--key-learnings)**
 
 ## Brief
 
@@ -113,7 +156,7 @@ As the previous two group projects for General Assembly used Material UI compone
 
 
 ### Interactive Maps
-As I wanted to base my core functionality around interactive maps for users to add and visualise sighting data, I knew I would need a map component. I devoted a couple of hours to researching this, looking at options including MapBox, before settling on using Leaflet, which has a React implementation, coupled with OpenStreetMap. This ticked the boxes of being free to use and open source, to avoid limiting potential functionality down the line. I spent some time getting familiar with the react-leaflet components. Map markers in react-leaflet are self-contained components that take props for latitude and longitude, so it should be possible to add any number of sightings to the map by using array.map() (no pun intended) to iterate through sightings and pass in the location values to a new Marker component for each.
+As I wanted to base my core functionality around interactive maps for users to add and visualise sighting data, I knew I would need a map component. I devoted a couple of hours to researching this, looking at options including MapBox, before settling on using Leaflet, which has a React implementation, coupled with OpenStreetMap. This ticked the boxes of being free to use and open source, to avoid limiting potential functionality down the line. I spent some time getting familiar with the react-leaflet components. Map markers in react-leaflet are self-contained components that take props for latitude and longitude, so it should be possible to add any number of sightings to the map by using `Array.map()` (no pun intended) to iterate through sightings and pass in the location values to a new Marker component for each.
 
 ### Trello
 I used a Trello board to plan ahead as I went, allowing me to create my own tickets for bugs and functionality, and organise my priorities. This allowed me to stay agile throughout the project, and rapidly move from one task to the next, whilst keeping sight of my broader progress through the project.
