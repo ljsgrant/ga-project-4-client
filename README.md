@@ -12,6 +12,8 @@ This was my final project for 3-month Software Engineering Immersive course with
 ![bird list page](/readme_assets/project-4-allbirds.png)
 ![single bird page](/readme_assets/project-4-bird.png)
 
+<br />
+
 ## Contents
 
 * **[Brief](#brief)**
@@ -58,6 +60,8 @@ This was my final project for 3-month Software Engineering Immersive course with
 * **[Bugs](#bugs)**
 * **[Takeaways & Key Learnings](#takeaways--key-learnings)**
 
+<br />
+
 ## Brief
 
 The brief was to:
@@ -68,9 +72,17 @@ The brief was to:
 > * Full CRUD functionality;
 > * The application be deployed online.
 
+[&#9650; _Back to contents_](#contents)
+
+<br />
+
 ## Timeframe & Team
 
 This was a solo project, completed over the course of 1 week. 
+
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 ## Technologies Used
 * React
@@ -91,6 +103,10 @@ This was a solo project, completed over the course of 1 week.
 * Netlify
 * Heroku
 
+[&#9650; _Back to contents_](#contents)
+
+<br />
+
 ## Installation Requirements
 ### API:
 * Python
@@ -98,8 +114,12 @@ This was a solo project, completed over the course of 1 week.
 * Pipenv
 * PostgreSQL
 
-Client:
+### Client:
 * Cloudinary (an account is required to implement photo upload and viewing functionality – the app will run without it but photo functionality will be broken)
+
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 ## Code Installation
 ### API:
@@ -127,6 +147,10 @@ REACT_APP_BASE_URL=http://localhost:8000
 5. Run `npm start` (starts the development server -  should start on port 3000 by default)
 6. In your browser, navigate to http://localhost:3000/
 
+[&#9650; _Back to contents_](#contents)
+
+<br />
+
 # Development Process Write-Up
 Covering some of the specifics of my build process.
 
@@ -142,10 +166,18 @@ I set myself some stretch goals, including:
 * The ability for users to filter sighting data, to get insights on bird behaviour
 * User comments on sightings 
 
+[&#9650; _Back to contents_](#contents)
+
+<br />
+
 ### Database
 My first step in planning was to make a plan for the database: which fields each model would need; what the relationships between the tables would be. I included non-essential models for my stretch goals, but greyed these out in the plan to keep them separate from the essential functionality:
 
 ![database plan](/readme_assets/project-4-planning-database.png)
+
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 ### Wireframing
 Next I wireframed the various pages/components, storyboarding the user’s flow through the site. Although I decided to build the site desktop-first, I tried to structure each component to make it as easy as possible to restyle for mobile screens – most components have two main containers, which could either sit side-by-side, or be stacked vertically. 
@@ -154,21 +186,40 @@ Next I wireframed the various pages/components, storyboarding the user’s flow 
 
 As the previous two group projects for General Assembly used Material UI components fairly heavily, I was keen to take a different approach for this project and use vanilla HTML elements to build out my components wherever possible, and style them from scratch with Sass.
 
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 ### Interactive Maps
 As I wanted to base my core functionality around interactive maps for users to add and visualise sighting data, I knew I would need a map component. I devoted a couple of hours to researching this, looking at options including MapBox, before settling on using Leaflet, which has a React implementation, coupled with OpenStreetMap. This ticked the boxes of being free to use and open source, to avoid limiting potential functionality down the line. I spent some time getting familiar with the react-leaflet components. Map markers in react-leaflet are self-contained components that take props for latitude and longitude, so it should be possible to add any number of sightings to the map by using `Array.map()` (no pun intended) to iterate through sightings and pass in the location values to a new Marker component for each.
+
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 ### Trello
 I used a Trello board to plan ahead as I went, allowing me to create my own tickets for bugs and functionality, and organise my priorities. This allowed me to stay agile throughout the project, and rapidly move from one task to the next, whilst keeping sight of my broader progress through the project.
 
 ![trello board](/readme_assets/project-4-trello-2.png)
 
+[&#9650; _Back to contents_](#contents)
+
+<br />
+
 I also kept a pad of paper on my desk for taking quick notes and pseudocoding problems before writing any code. Between my wireframes, database plan, Trello board, and making sure to psuedocode problems before tackling them in VSCode, I was able to manage my time effectively throughout the project.
+
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 ## Coding
 
 ### General approach & process
 I devoted half a day to planning, before establishing separate repositories for the front-end and back-end, each with a main branch and a development branch plus feature branches. Then I began to build out the core functionality of the API before starting work on the front-end, and developing new features and stretch goals across the front- and back-end simultaneously. As I had less experience with Django compared to Express, I proceeded cautiously and worked methodically to avoid making silly mistakes that would cost me time later. I kept the Django documentation open for quick reference, and made sure to commit regularly.
+
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 ### Back-End: Registration and Login
 I began work on the API by setting up authentication:
@@ -181,6 +232,10 @@ I began work on the API by setting up authentication:
 * I added Views and URLs for Register and Login, to handle POST requests to their respective endpoints. The RegisterView validates the request data and saves it to the database if it’s valid; the LoginView finds the user in the database associated with the email from the request data, raising PermissionDenied if the user doesn’t exist, and uses the check_password method to validate the incoming password. Then I create an expiry timestamp using `datetime.now()` and `timedelta()`, and generate a jwt token using `jwt.encode()`, passing in the user’s id and the expiry timestamp, and return the token in the Response.
 
 By the end of the first day on the project I had implemented authentication, with endpoints for registration and login and functions to handle requests to these endpoints, and tested the functionality using Postman. 
+
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 ### Back-End: Setting up Models and Serializers
 After setting up users and authentication, I added models and endpoints for Birds and Sightings, common and populated serializers for each, and APIViews to handle requests.
@@ -220,10 +275,18 @@ class BirdSerializer(serializers.ModelSerializer):
        fields = '__all__'
 ```
 
+[&#9650; _Back to contents_](#contents)
+
+<br />
+
 ### Front-End: Setup & basics
 I used `Create React App` to set up the project structure, set up the API to allow Cross-Origin Resource Sharing with `django-cors-headers`, and then edited the package.json in the Client to proxy requests from the front-end development server to the API on `localhost:8000`.
 
 I checked that I could make basic GET requests from App.js in the front end, then installed `react-router-dom` and added a BrowserRouter, created a basic Navbar component, and added a bird list, to become the list of birds and the heat maps of their sightings.
+
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 ### Front-End: Login & Register
 For the sake of speed, I reused some small parts of previous projects to get basic functionality in: the `useAuthenticated` custom hook for example, which checks requests for a valid token - as well as the structure of the api.js file, giving quick access to requests and endpoints.
@@ -249,6 +312,10 @@ const handleSubmit = async (event) => {
    }
  };
 ```
+
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 ### Bird Details, Maps to Show Sighting Data
 I built out a component to view information on a single bird. As we get populated data for sightings from the API, we can view the sightings of that bird. I started by just getting sightings to show as timestamps and latitude/longitude in the right hand container. Then I worked on implementing a map component, so I could show this data visually. I installed `react-leaflet` (see [Planning section](#planning) for more on this) and added the react-leaflet MapContainer component with a TileLayer, as per the docs. And voila! …it’s broken.
@@ -278,6 +345,10 @@ Success!
 
 ![markers on the map](/readme_assets/project-4-sightings-wip.png)
 
+[&#9650; _Back to contents_](#contents)
+
+<br />
+
 ### Adding Interactive Maps to Input Data
 To allow users to record bird sightings, I built out a NewSighting component with some form inputs and another react-leaflet map - this time with the Marker component taking `draggable={true}` as a prop, which allows it to be moved around the map - this is great functionality out of the box and really intuitive to implement. I use the dragend event to fire a `moveMarker()` function when the user has released the marker, which in turn updates some state for `markerPosition` using the built-in `getLatLng()` method from Leaflet:
 ```jsx
@@ -288,6 +359,10 @@ To allow users to record bird sightings, I built out a NewSighting component wit
     }
   }
 ```
+
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 ### Latitude/Longitude Inputs & Marker Position
 For the sake of both accessibility and precision, I added a couple of inputs for latitude and longitude, and so the user can see a readout of the current latitude/longitude, added `value={markerPosition.lng}`/`value={markerPosition.lat}` to them so they display the current marker position. I set each to fire a `handleLatLongTextChange` function on change, which in turn sets state for `markerPosition` with the new value, therefore updating the marker position if the user edits the values. 
@@ -317,6 +392,10 @@ Finally I added a `useEffect` hook with the markerPosition as a dependency, so t
 
 To finish off the core functionality of the NewSighting component, I added a const for the “sightings” endpoint into my api.js lib file, and a `handleSubmit` function to fire a POST request to the endpoint.
 
+[&#9650; _Back to contents_](#contents)
+
+<br />
+
 ### List of All Birds
 To display a list of all birds in the database, in the BirdList component I make a request to the BirdListView endpoint in the API and iterate through the results using `Array.map()` to return a BirdListCard component, passing in the names and image of the bird as props. The BirdListCard takes props for bird and `setSingleBirdData`, passed in from the parent BirdList component. I use `onMouseEnter` to call a `handleMouseEnter` function which sets state for `birdData` equal to the bird that has been passed in to the BirdListCard, effectively passing the `birdData` back to the parent BirdList:
 ``` js
@@ -345,12 +424,19 @@ This means that in the right pane of BirdList, I can use this state to render wh
 
 ![bird list behaviour](/readme_assets/project-4-birdlist-behaviour.gif)
 
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 ### Searching Birds
 #### **Overview**
 The list behaviour above works well for previewing the bird before proceeding to viewing a sighting, but I wanted users to be able to easily find a bird they have seen or want data for – asking them to scroll through a list of potentially hundred or thousands of results isn’t realistic, so I needed a search functionality that takes a query and returns matching birds. I liked the responsiveness of the page so far, with the ability to quickly flip through the results without leaving the page, so I wanted to have functionality that would update the list as the user types, rather than taking them to a new page. Functionality shown here in the deployed app:
 
 ![bird search behaviour](/readme_assets/project-4-bird-search.gif)
+
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 #### **API**
 In the views.py for the birds app, I added a BirdSearchView to take a POST request, extract a `searchTerm` from the request body, and then `filter()` birds by bird name for any containing the `searchTerm`, using `name__icontains` to ignore case. Finally we return the filtered birds, sorted alphabetically:
@@ -369,6 +455,10 @@ class BirdSearchView(APIView):
 > #### **Note:**
 > One area of improvement I would like to add to this is the ability to filter by a field of the user’s choice, rather than the bird’s common name only. 
 
+[&#9650; _Back to contents_](#contents)
+
+<br />
+
 #### **Client**
 In the Client, I added an `onChange` listener to fire a `handleSearch` function and set state for the `searchTerm` whenever the user types a new query. I added a `useEffect` to fire a POST request to the search endpoint with the `searchTerm` as the body, whenever the `searchTerm` changes: this then updates the `birdData` with the search results from the back end:
 ``` jsx
@@ -384,6 +474,10 @@ In the Client, I added an `onChange` listener to fire a `handleSearch` function 
      .catch((err) => console.error(err));
  }, [searchTerm]);
 ```
+
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 ### Sighting Photos
 #### **Uploading Photos** 
@@ -433,8 +527,16 @@ const handleSubmit = async (event) => {
  };
 ```
 
+[&#9650; _Back to contents_](#contents)
+
+<br />
+
 #### **Displaying Photos**
 To display the photos from Cloudinary, I made a component for UserSightingPhoto, which takes a `cloudinaryImageId` as props and makes a GET request to Cloudinary for the photo. I used this component in the map popup – so clicking on a sighting will show the photo – and when displaying the full details of a sighting.
+
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 ### Using Photo Metadata for Timestamps
 Although users can input a time and date for a sighting, I thought about how this would work in reality: although some users might record any sightings the moment they happen, others may input sightings later that day, or even take a bunch of photos of birds one day and only come to recording them months later, at which point accurately inputting the timestamp for each sighting manually could be a long, difficult task.
@@ -508,6 +610,10 @@ Finally in the UI, I wrapped the date input field in a ternary to render the inp
                )}
 ```
 
+[&#9650; _Back to contents_](#contents)
+
+<br />
+
 ### Single Sighting Modal
 To view more details about a single sighting, I considered taking the user to a new page, but decided instead to use a modal to display the sighting over the map, to avoid interrupting the user’s flow and enable them to quickly and easily check out several sightings. 
 
@@ -554,11 +660,19 @@ export default function MapPopup({
 ```
 The modal component then makes an API request for the sighting data whenever a new sighting is selected, via a `useEffect` hook with the `sightingId` as a dependency. 
 
+[&#9650; _Back to contents_](#contents)
+
+<br />
+
 #### **Modal Layout & Styling**
 
 To get the modal to hover over the site I made a parent div in the component, and added some basic styling in a scss file. I set its position to absolute, gave it a translucent `background-color`, set `width` and `height` to 100%, and used Flexbox to center any child elements. Using this as the background element means the rest of the site appears greyed out when the modal is open, and locks out the underlying UI until the modal is closed. To ensure it always appears over other elements – including the Leaflet MapContainer, with its high z-index – I gave the modal a z-index of 1100.
 
 Then I added a child div which would be the actual container for the modal UI, setting its width and height to `50vw` and `80vh` respectively, before building out the content with fields from the sighting data.
+
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 #### **Modal Tabs**
 To avoid cluttering the modal, I made a tab UI so users can toggle between the photo of the sighting, and the map (which has its center locked to the sighting, so the user can only zoom in & out, to avoid them “losing” the sighting on the map): 
@@ -623,6 +737,11 @@ token = jwt.encode(
            settings.SECRET_KEY, algorithm='HS256'
        )
 ```
+
+[&#9650; _Back to contents_](#contents)
+
+<br />
+
 ### Editing Sightings
 Clicking on “edit sighting” in the sighting modal will close the modal and open an Edit Sighting page for the id of that sighting. This is largely just a tweaked version of the NewSighting component, with a couple of changes.
 
@@ -655,11 +774,18 @@ useEffect(() => {
 
 Submitting the form will then make a PUT request to the `singleSighting` endpoint, again passing in the id from `useParams`.
 
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 ### Deleting Sightings
 I added functionality to ask the user to confirm deletion of a sighting, and giving them an option to cancel the deletion. For time’s sake at this point, I installed Material UI and added in a dialog component I had used on a previous project, copying most of the logic over:
 
 ![delete sighting confirmation alert](/readme_assets/project-4-delete-alert.png)
+
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 ### Adding Map Filters
 The ability to filter map data by various parameters was one of my main stretch goals, so I was happy to find the time near the end of the project to build in this functionality! This lets users filter the sighting markers:
@@ -683,6 +809,10 @@ if body['timeFrom'] and body['timeTo']:
 ```
 If a value evaluates to true, I use the `filter()` method to iterate through the `filtered_sightings` list, filtering the list for the given data, before setting `filtered_sightings` as equal to the results. 
 
+[&#9650; _Back to contents_](#contents)
+
+<br />
+
 #### **Filtering sightings by date range**
 For example, to filter by a date range I format the `dateFrom` and `dateTo` as numbers (i.e. 2022-04-21 would become 20220421), before defining a function to check if the sighting’s timestamp is greater than the `dateFrom` timestamp and less than the `dateTo` timestamp – this function also extracts the date from the `sighted_at_datetime` and formats it in the same way as above. I pass this function into the `filter()` method as the test to filter by, along with the `filtered_sightings` as the list to filter, before finally setting `filtered_sightings` equal to the filtered list:
 ``` py
@@ -701,6 +831,10 @@ For example, to filter by a date range I format the `dateFrom` and `dateTo` as n
                check_if_in_date_range, filtered_sightings)
            filtered_sightings = list(sightings_iterator)
 ```
+
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 #### **Filtering sightings by time range**
 I use similar logic to handle filtering by a time range, but here I needed to account for the fact that if the time range includes midnight, the `formatted_time_from` will be greater than the `formatted_time_to`. I started by working through a solution in pseudocode…
@@ -723,6 +857,10 @@ When calling the `filter()` method, I use if statements to check whether the `fo
                filtered_sightings = list(sightings_iterator)
 ```
 
+[&#9650; _Back to contents_](#contents)
+
+<br />
+
 #### **Returning filtered data**
 Finally once all filters have been applied, I replace the bird’s list of sightings with the `filtered_sightings` before returning the bird in the Response:
 ``` py
@@ -731,6 +869,10 @@ Finally once all filters have been applied, I replace the bird’s list of sight
 
        return Response(bird_data, status=status.HTTP_200_OK)
 ```
+
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 #### **Implementing map filters in the front-end**
 In the BirdDetails component I added some state for filters, initialising this as an object with default values which will evaluate to false in the API:
@@ -758,6 +900,10 @@ Finally, for each input I set the disabled property equal to areFiltersApplied, 
 
 ![applying and clearing map filters](/readme_assets/project-4-map-filters-closeup.gif)
 
+[&#9650; _Back to contents_](#contents)
+
+<br />
+
 ### Styling
 To handle fonts, I made a FontStyles.scss Sass file and imported it into App.js, so I could easily control the fonts across the entire site. I used a _variables.scss file to control the size of elements and theme colours across multiple pages, and used this to build out a consistent visual theme based around the light sea green, dark blue and light grey. 
 
@@ -769,10 +915,17 @@ I continued a rounded-corner aesthetic for containers throughout the site, and m
 
 One of my biggest areas for future improvement with the styling is the current lack of responsive design – in hindsight going for a mobile-first design approach would have been best. Also the form on the NewSighting page is currently very rough, with inconsistent layout and styling for text and inputs.
 
+[&#9650; _Back to contents_](#contents)
+
+<br />
+
 ### Final Tweaks
 * I broke the map popup out into its own component, and fixed its behaviours so it won’t load a broken photo if there is no photo - instead rendering text “no photo for this sighting”. 
 * I built out the landing page, using conditional rendering to display a different message depending on if user is logged in, and greet the user by their username if they are.
 
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 ## Future Improvements
 * Although I’m generally happy with the theme of the site and pleased with some of my styling, the biggest issue with the current version of the app is the lack of responsive design. To maximise my learning experiences on this project I focussed more on polishing features than on styling, and in hindsight going for a mobile-first design approach may have been best for maximum functionality with less extra work. 
@@ -784,10 +937,22 @@ One of my biggest areas for future improvement with the styling is the current l
 * The addition of more fields for bird information, such as “behaviour”, “size”, “colouring”, etc., to help users find information more quickly and aid accessibility.
 * I haven’t implemented a loading spinner for all components that need it – most noticeably when adding a sighting, the page hangs while the component uploads the photo to Cloudinary and awaits the response. 
 
+[&#9650; _Back to contents_](#contents)
+
+<br />
+
 ## Bugs
 * When creating a sighting, if the user clicks the button to post the sighting several times, it is possible to upload several of the same photo to Cloudinary before the sighting is posted to the database. The easiest fix for this is probably setting a boolean `isSubmitted` when the user clicks the button, and only execute the `handleSubmit` function if `isSubmitted === false`. 
+
+[&#9650; _Back to contents_](#contents)
+
+<br />
 
 ## Takeaways & Key Learnings
 * Overall this project gave me a good boost of confidence in my ability to work through problems without teammates to turn to for help, and forced me to tackle the aspects of full-stack development I was less confident with. I can really notice the improvements to my skillset after confronting and overcoming the challenges of this project.
 * Working solo for this project meant that, without teammates and the need to communicate about progress at every step of the way, there was the temptation to rush from one thing to the next without fully finishing a feature, or to get side-tracked on a new piece of functionality that wasn’t in the scope of my original plan. This felt at times like I could run the risk of losing track of the bigger picture or causing self-inflicted scope-creep. I found it really helpful on this project to essentially behave as though I was working in a team. I created deadlines for myself, made sure I was accurately tracking my progress on my Trello board, and reviewed my work at each stage before progressing to the next task. This helped me hold myself accountable for finishing each feature as completely as possible in the time available.
 * Working methodically and testing functionality at each step can feel slow, especially when short on time – but thoroughly checking one block of code before starting on the next one makes it easier to catch bugs earlier. This saves so much time on debugging later, and especially when working with unfamiliar technologies.
+
+[&#9650; _Back to contents_](#contents)
+
+<br />
