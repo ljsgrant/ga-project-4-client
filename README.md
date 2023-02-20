@@ -8,6 +8,10 @@ Birdl is a full-stack web app for birdwatchers to record bird sightings, view ot
 
 This was my final project for 3-month Software Engineering Immersive course with General Assembly.
 
+![landing page](/readme_assets/project-4-landing.png)
+![bird list page](/readme_assets/project-4-allbirds.png)
+![single bird page](/readme_assets/project-4-bird.png)
+
 ## Contents
 Contents with links to headings here
 
@@ -16,7 +20,7 @@ Contents with links to headings here
 The brief was to:
 
 > Build a full-stack application with a Python Django API that uses Django REST Framework to serve data from a Postgres database. This API must be consumed by a separate front-end built with React.
-> * There must be:
+> There must be:
 > * Multiple relationships between multiple models;
 > * Full CRUD functionality;
 > * The application be deployed online.
@@ -77,7 +81,7 @@ REACT_APP_CLOUDINARY_UPLOAD_PRESET=<YOUR PRESET HERE>
 
 REACT_APP_BASE_URL=http://localhost:8000 
 ```
-5. Run npm start (starts the development server -  should start on port 3000 by default)
+5. Run `npm start` (starts the development server -  should start on port 3000 by default)
 6. In your browser, navigate to http://localhost:3000/
 
 # Development Process Write-Up
@@ -98,9 +102,12 @@ I set myself some stretch goals, including:
 ### Database
 My first step in planning was to make a plan for the database: which fields each model would need; what the relationships between the tables would be. I included non-essential models for my stretch goals, but greyed these out in the plan to keep them separate from the essential functionality:
 
+![database plan](/readme_assets/project-4-planning-database.png)
+
 ### Wireframing
 Next I wireframed the various pages/components, storyboarding the user’s flow through the site. Although I decided to build the site desktop-first, I tried to structure each component to make it as easy as possible to restyle for mobile screens – most components have two main containers, which could either sit side-by-side, or be stacked vertically. 
 
+![project wireframes](/readme_assets/project-4-wireframe-storyboard.png)
 
 As the previous two group projects for General Assembly used Material UI components fairly heavily, I was keen to take a different approach for this project and use vanilla HTML elements to build out my components wherever possible, and style them from scratch with Sass.
 
@@ -111,6 +118,7 @@ As I wanted to base my core functionality around interactive maps for users to a
 ### Trello
 I used a Trello board to plan ahead as I went, allowing me to create my own tickets for bugs and functionality, and organise my priorities. This allowed me to stay agile throughout the project, and rapidly move from one task to the next, whilst keeping sight of my broader progress through the project.
 
+![trello board](/readme_assets/project-4-trello-2.png)
 
 I also kept a pad of paper on my desk for taking quick notes and pseudocoding problems before writing any code. Between my wireframes, database plan, Trello board, and making sure to psuedocode problems before tackling them in VSCode, I was able to manage my time effectively throughout the project.
 
@@ -140,6 +148,7 @@ I ended up creating multiple populated serializers for sightings, for different 
 
 This was definitely one of the more challenging parts of the API for me – following the logic through several serializers, and wrapping my head around which one needed to be used at which point took a while. To wrap my head around how to handle this in Django, I worked out the flow of logic on paper first before writing the code:
 
+![serializers notes](/readme_assets/project-4-serializers-notes.jpeg)
 
 And then, following the flow of logic in the code, the User is populated with Sightings, which are themselves populated with Birds using the common BirdSerializer:
 ```py
@@ -201,7 +210,11 @@ const handleSubmit = async (event) => {
 ### Bird Details, Maps to Show Sighting Data
 I built out a component to view information on a single bird. As we get populated data for sightings from the API, we can view the sightings of that bird. I started by just getting sightings to show as timestamps and latitude/longitude in the right hand container. Then I worked on implementing a map component, so I could show this data visually. I installed `react-leaflet` (see [Planning section](#planning) for more on this) and added the react-leaflet MapContainer component with a TileLayer, as per the docs. And voila! …it’s broken.
 
+![broken leaflet map](/readme_assets/project-4-broken-map.png)
+
 This is expected – from the Leaflet documentation I know I need to import leaflet’s stylesheet for it to work, but upon doing this the map disappears entirely. At this point I took a spin on stack overflow and realised that the MapContainer has a `.leaftlet-container` className, and this needs to be given dimensions for the map to show. Makes sense. I added `.leaflet-container` to BirdDetails.scss, for now just giving it 100% width and height so I can drive its dimensions using its parent container, and we have a map:
+
+![leaflet map](/readme_assets/project-4-map.png)
 
 Now I just need to show the sightings of the bird as markers on the map. Inside the <MapContainer> component, I use `Array.map()` to iterate through the sightings array for the selected bird, using Optional Chaining to avoid throwing errors if the sightings array is empty, and return the Leaflet Marker component, passing in the latitude and longitude of each sighting’s location. I also included the react-leaflet Popup component, to show more details about the sighting should the user click on it:
 ``` jsx
@@ -220,6 +233,7 @@ Now I just need to show the sightings of the bird as markers on the map. Inside 
 
 Success!
 
+![markers on the map](/readme_assets/project-4-sightings-wip.png)
 
 ### Adding Interactive Maps to Input Data
 To allow users to record bird sightings, I built out a NewSighting component with some form inputs and another react-leaflet map - this time with the Marker component taking `draggable={true}` as a prop, which allows it to be moved around the map - this is great functionality out of the box and really intuitive to implement. I use the dragend event to fire a `moveMarker()` function when the user has released the marker, which in turn updates some state for `markerPosition` using the built-in `getLatLng()` method from Leaflet:
@@ -286,11 +300,14 @@ export default function BirdListCard({ bird, setSingleBirdData }) {
 
 This means that in the right pane of BirdList, I can use this state to render whichever bird in the list the user is currently hovering their cursor over (behaviour shown here in the deployed app):
 
+![bird list behaviour](/readme_assets/project-4-birdlist-behaviour.gif)
+
 
 ### Searching Birds
 #### **Overview**
 The list behaviour above works well for previewing the bird before proceeding to viewing a sighting, but I wanted users to be able to easily find a bird they have seen or want data for – asking them to scroll through a list of potentially hundred or thousands of results isn’t realistic, so I needed a search functionality that takes a query and returns matching birds. I liked the responsiveness of the page so far, with the ability to quickly flip through the results without leaving the page, so I wanted to have functionality that would update the list as the user types, rather than taking them to a new page. Functionality shown here in the deployed app:
 
+![bird search behaviour](/readme_assets/project-4-bird-search.gif)
 
 #### **API**
 In the views.py for the birds app, I added a BirdSearchView to take a POST request, extract a `searchTerm` from the request body, and then `filter()` birds by bird name for any containing the `searchTerm`, using `name__icontains` to ignore case. Finally we return the filtered birds, sorted alphabetically:
@@ -383,11 +400,13 @@ Knowing that common image formats contain metadata on when and how the photo was
 
 Functionality in the deployed site:
 
-
+![setting sighting timestamp from photo metadata](/readme_assets/project-4-jpeg-timestamp.gif)
 
 I considered handling this through Cloudinary, as it is possible to use the Cloudinary upload preset to return the photo metadata in the response - but I wanted the user to be able to check the timestamp before posting the sighting, so this would require the unnecessary complexity of posting to Cloudinary every time the user chose a new file, regardless of whether they post the sighting with that photo. I decided it was far easier to just handle this in the client. 
 
 I first planned out the functionality:
+
+![planning out timestamp from metadata functionality](/readme_assets/project-4-planning-timestamp.png)
 
 After quickly researching a few options for getting metadata on the front end, I installed the `exif-js` package. I targeted the file input element with a `useRef` hook, and then added a checkbox with an `onChange` listener to call a function that handles the checkbox, gets the timestamp from the metadata using the `EXIF.getData()` method, and sets the `formFields` with the `metadataTimestamp`: 
 ``` jsx
@@ -449,6 +468,7 @@ Finally in the UI, I wrapped the date input field in a ternary to render the inp
 ### Single Sighting Modal
 To view more details about a single sighting, I considered taking the user to a new page, but decided instead to use a modal to display the sighting over the map, to avoid interrupting the user’s flow and enable them to quickly and easily check out several sightings. 
 
+![opening and closing the sighting modal](/readme_assets/project-4-modal-open-close.gif)
 
 I began by creating a basic component with a container, that took a sighting ID as props so I could make a GET request for the sighting data when the modal was opened from a given sighting. As I wanted the modal to sit above the entire site’s UI when opened, I imported it into App.js and added some state for a bird ID as well as state to track if the modal is open or closed:
 ```jsx
@@ -500,6 +520,8 @@ Then I added a child div which would be the actual container for the modal UI, s
 #### **Modal Tabs**
 To avoid cluttering the modal, I made a tab UI so users can toggle between the photo of the sighting, and the map (which has its center locked to the sighting, so the user can only zoom in & out, to avoid them “losing” the sighting on the map): 
 
+![toggling between the modal tabs](/readme_assets/project-4-modal-tabs.gif)
+
 Map and photo tabs:
 ``` jsx
 <button ref={photoButtonRef} onClick={showPhoto}>
@@ -548,6 +570,7 @@ I also added controls for editing and deleting the sighting, which are condition
                    )}
 ```
 
+![buttons to edit and delete a sighting](/readme_assets/project-4-edit-delete-sighting-controls.png)
 
 To allow me to get the value of `isAdmin` for the current user in the client, in the API LoginView I encode this field into the token from the user’s data as they log in: 
 ``` py
@@ -593,6 +616,7 @@ Submitting the form will then make a PUT request to the `singleSighting` endpoin
 ### Deleting Sightings
 I added functionality to ask the user to confirm deletion of a sighting, and giving them an option to cancel the deletion. For time’s sake at this point, I installed Material UI and added in a dialog component I had used on a previous project, copying most of the logic over:
 
+![delete sighting confirmation alert](/readme_assets/project-4-delete-alert.png)
 
 ### Adding Map Filters
 The ability to filter map data by various parameters was one of my main stretch goals, so I was happy to find the time near the end of the project to build in this functionality! This lets users filter the sighting markers:
@@ -601,6 +625,8 @@ The ability to filter map data by various parameters was one of my main stretch 
 * To filter by the user’s own sightings only, hiding sightings by other users.
 
 Functionality in the deployed site:
+
+![setting and clearing sighting filters](/readme_assets/project-4-map-filters.gif)
 
 To achieve this, in the API I created an APIView called `BirdFilteredSightingsView`, with a function to handle a POST request, and added a `filtersightings/` endpoint into the urls.py. This function gets a bird for a given primary key, and stores its list of sightings in a `filtered_sightings` variable. Then I use if statements to check if values for each of the filters evaluate to true or false:
 ```py
@@ -635,6 +661,8 @@ For example, to filter by a date range I format the `dateFrom` and `dateTo` as n
 
 #### **Filtering sightings by time range**
 I use similar logic to handle filtering by a time range, but here I needed to account for the fact that if the time range includes midnight, the `formatted_time_from` will be greater than the `formatted_time_to`. I started by working through a solution in pseudocode…
+
+![filter by time pseudocode](/readme_assets/project-4-planning-filter-time.jpeg)
 
 …then I coded this out, defining two functions to pass into the `filter()` method depending on whether the time range includes or excludes midnight:
 * `check_if_in_time_range_incl_midnight`, which returns `True` if the `formatted_list_item` is greater than the `formatted_time_from` *OR* is less than the `formatted_time_to`;
@@ -685,14 +713,16 @@ I added buttons to apply and clear the filters, which have `onClick` listeners t
 
 Finally, for each input I set the disabled property equal to areFiltersApplied, so when filters are applied, their values can’t be changed until the Clear All button is clicked:
 
+![applying and clearing map filters](/readme_assets/project-4-map-filters-closeup.gif)
 
 ### Styling
 To handle fonts, I made a FontStyles.scss Sass file and imported it into App.js, so I could easily control the fonts across the entire site. I used a _variables.scss file to control the size of elements and theme colours across multiple pages, and used this to build out a consistent visual theme based around the light sea green, dark blue and light grey. 
 
 I continued a rounded-corner aesthetic for containers throughout the site, and made a containerStyles.scss file with several utility classes so I could quickly apply these styles to various containers. I also created a buttonStyles.scss file with utility classes for styling up buttons of different dimensions and in different contexts.
 
-
-
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |
+| :-------------------------:|:-------------------------: |
+| ![bird container](/readme_assets/project-4-containerstyle-1.png) ![bird container](/readme_assets/project-4-containerstyle-2.png)  | ![new sighting container](/readme_assets/project-4-containerstyle-3.png) ![bird container 2](/readme_assets/project-4-containerstyle-5.png) | 
 
 One of my biggest areas for future improvement with the styling is the current lack of responsive design – in hindsight going for a mobile-first design approach would have been best. Also the form on the NewSighting page is currently very rough, with inconsistent layout and styling for text and inputs.
 
