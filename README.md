@@ -202,10 +202,6 @@ I used a Trello board to plan ahead as I went, allowing me to create my own tick
 
 ![trello board](/readme_assets/project-4-trello-2.png)
 
-[&#9650; _Back to contents_](#contents)
-
-<br />
-
 I also kept a pad of paper on my desk for taking quick notes and pseudocoding problems before writing any code. Between my wireframes, database plan, Trello board, and making sure to psuedocode problems before tackling them in VSCode, I was able to manage my time effectively throughout the project.
 
 [&#9650; _Back to contents_](#contents)
